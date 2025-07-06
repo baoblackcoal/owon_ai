@@ -3,8 +3,31 @@
 - 测试注册邮箱使用 baojianbin@owoncn.com , 测试密码为 llp123456
 - 开发环境是使用 test 项目数据库，生产环境是使用 owon_ai 项目数据库
 
-# 开发
-- 使用 pnpm 
-- 使用 do-env 管理环境变量
-- 使用 pnpm dev 启动开发环境, 使用 pnpm prod:build 构建生产环境, 使用 pnpm prod:start 启动生产环境
-- env.development.local 和 .env.production.local 文件都配置好了
+# 开发环境
+- 操作系统：Windows 11
+- 终端：Windows PowerShell
+- Node.js：使用最新的 LTS 版本
+- 包管理器：使用 pnpm
+- 环境变量：使用 do-env 管理
+
+# 项目配置
+- 开发服务器：pnpm dev (使用 turbopack)
+- 生产构建：pnpm build
+- 生产服务器：pnpm start
+- 代码检查：pnpm lint
+- 环境配置文件：
+  - 开发环境：.env.development.local
+  - 生产环境：.env.production.local
+  - 这些文件都需要正确配置 Supabase URL 和 anon key
+
+# 开发规范
+- 使用 TypeScript 进行开发
+- 使用 ESLint 进行代码检查
+- 使用 Prettier 进行代码格式化
+- SQL 文件存放在 sql/ 目录下
+- 组件使用 shadcn/ui 组件库
+- 使用 Tailwind CSS 进行样式开发
+
+# 测试
+- 使用 Playwright 进行 E2E 测试
+- 使用 Supabase MCP 工具测试数据库
