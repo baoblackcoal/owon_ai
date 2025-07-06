@@ -128,7 +128,7 @@ export async function DELETE(request: Request) {
       return NextResponse.redirect(new URL('/auth/login', request.url));
     }
 
-    const headersList = headers();
+    const headersList = await headers();
     const host = headersList.get('host') || 'localhost:3000';
     const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
     const url = new URL(request.url, `${protocol}://${host}`);
