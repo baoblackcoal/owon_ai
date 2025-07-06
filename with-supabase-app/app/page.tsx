@@ -48,7 +48,7 @@ export default function Home() {
               <p className="text-muted-foreground">
                 强大的任务管理功能，帮助你合理安排时间，提高工作效率。
               </p>
-            </div>
+              </div>
             <div className="flex flex-col items-center text-center p-6 rounded-lg bg-card">
               <Share2 className="w-12 h-12 text-primary mb-4" />
               <h3 className="text-xl font-semibold mb-2">随时访问</h3>
@@ -77,6 +77,6 @@ export default function Home() {
           </Button>
         </div>
       </section>
-    </div>
+      </div>
   );
 }

@@ -78,7 +78,7 @@ export default async function ProtectedPage() {
             <Button asChild variant="link" className="mt-4">
               <Link href="/protected/todos">创建任务</Link>
             </Button>
-          </div>
+      </div>
         )}
       </div>
     </div>

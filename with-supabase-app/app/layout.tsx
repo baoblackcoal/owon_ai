@@ -38,7 +38,7 @@ export default function RootLayout({
               <h1 className="text-4xl font-bold mb-2">OWON Todo</h1>
               <p className="text-muted-foreground">管理你的每日任务</p>
             </header>
-            {children}
+          {children}
           </main>
         </ThemeProvider>
       </body>

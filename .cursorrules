@@ -1,3 +1,10 @@
 # supabase
 - .env.local 中的NEXT_PUBLIC_SUPABASE_URL 和 NEXT_PUBLIC_SUPABASE_ANON_KEY已设置好
 - 测试注册邮箱使用 baojianbin@owoncn.com , 测试密码为 llp123456
+- 开发环境是使用 test 项目数据库，生产环境是使用 owon_ai 项目数据库
+
+# 开发
+- 使用 pnpm 
+- 使用 do-env 管理环境变量
+- 使用 pnpm dev 启动开发环境, 使用 pnpm prod:build 构建生产环境, 使用 pnpm prod:start 启动生产环境
+- env.development.local 和 .env.production.local 文件都配置好了

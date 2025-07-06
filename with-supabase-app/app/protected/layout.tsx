@@ -43,7 +43,7 @@ export default async function ProtectedLayout({
                 </Link>
               </Button>
             </nav>
-          </div>
+              </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-muted-foreground">
               {user.email}
@@ -57,6 +57,6 @@ export default async function ProtectedLayout({
       <main className="flex-1 container py-6">
         {children}
       </main>
-    </div>
+      </div>
   );
 }

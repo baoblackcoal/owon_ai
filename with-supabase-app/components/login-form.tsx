@@ -28,19 +28,38 @@ export function LoginForm({
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const supabase = createClient();
     setIsLoading(true);
     setError(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      // 记录环境变量
+      console.log('SUPABASE URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+      console.log('Using production environment:', process.env.NODE_ENV === 'production');
+      
+      const supabase = createClient();
+      console.log('Supabase client created');
+
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
-      if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
+
+      console.log('Login response:', { data, error });
+
+      if (error) {
+        console.error('Login error:', error);
+        throw error;
+      }
+
+      if (data?.user) {
+        console.log('Login successful, redirecting...');
       router.push("/protected");
+      } else {
+        console.error('No user data returned');
+        throw new Error('No user data returned');
+      }
     } catch (error: unknown) {
+      console.error('Login error details:', error);
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
       setIsLoading(false);
@@ -90,7 +109,13 @@ export function LoginForm({
                   autoComplete="current-password"
                 />
               </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
+              {error && (
+                <p className="text-sm text-red-500">
+                  Error: {error}
+                  <br />
+                  <small>Please check the console for more details.</small>
+                </p>
+              )}
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Logging in..." : "Login"}
               </Button>
