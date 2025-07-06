@@ -24,6 +24,8 @@ async function callDashScope() {
             prompt: "ADS800A的带宽是多少？"
         },
         parameters: {
+            'incremental_output' : 'true',
+            'has_thoughts':'true',//工作流应用和智能体编排应用实现流式输出需要设置此参数
             rag_options:{
                 pipeline_ids:[pipeline_ids1,pipeline_ids2]  // 替换为指定的知识库ID，多个请用逗号隔开
             }
@@ -35,16 +37,39 @@ async function callDashScope() {
         const response = await axios.post(url, data, {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/json',
+                'X-DashScope-SSE': 'enable'
+            },
+            responseType: 'stream' // 用于处理流式响应
+
         });
 
         if (response.status === 200) {
-            console.log(`${response.data.output.text}`);
+            console.log("Request successful:");
+
+            // 处理流式响应
+            response.data.on('data', (chunk) => {
+                console.log(`Received chunk: ${chunk.toString()}`);
+            });
+
+            response.data.on('end', () => {
+                console.log("Stream ended.");
+            });
+
+            response.data.on('error', (error) => {
+                console.error(`Stream error: ${error.message}`);
+            });
         } else {
-            console.log(`request_id=${response.headers['request_id']}`);
+            console.log("Request failed:");
+            if (response.data.request_id) {
+                console.log(`request_id=${response.data.request_id}`);
+            }
             console.log(`code=${response.status}`);
-            console.log(`message=${response.data.message}`);
+            if (response.data.message) {
+                console.log(`message=${response.data.message}`);
+            } else {
+                console.log('message=Unknown error');
+            }
         }
     } catch (error) {
         console.error(`Error calling DashScope: ${error.message}`);
@@ -53,6 +78,7 @@ async function callDashScope() {
             console.error(`Response data: ${JSON.stringify(error.response.data, null, 2)}`);
         }
     }
+
 }
 
 callDashScope();
