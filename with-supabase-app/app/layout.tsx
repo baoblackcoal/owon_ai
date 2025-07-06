@@ -9,8 +9,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "OWON Todo 应用",
+  description: "一个简单高效的待办事项管理工具",
 };
 
 const geistSans = Geist({
@@ -25,15 +25,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
+    <html lang="zh-CN" suppressHydrationWarning>
+      <body className={`${geistSans.className} antialiased bg-background min-h-screen`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <main className="container mx-auto px-4 py-6">
+            <header className="mb-8 text-center">
+              <h1 className="text-4xl font-bold mb-2">OWON Todo</h1>
+              <p className="text-muted-foreground">管理你的每日任务</p>
+            </header>
+            {children}
+          </main>
         </ThemeProvider>
       </body>
     </html>
