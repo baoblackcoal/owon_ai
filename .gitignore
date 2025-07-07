@@ -1,2 +1,3 @@
 with-supabase-app/.env.prod
 with-supabase-app/.env.production
+node_modules
