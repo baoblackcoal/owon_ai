@@ -35,5 +35,5 @@
 # 注意
 - pnpm dev 需要开发人员手动启动，因为开发人员有可能已经启动过
 - 开发环境是在windows11，终端是PowerShell，使用多命令的时候需要使用分号连接
-- 不要在更目录中增加package.json， package.json在src目录下
+- 不要在根目录中增加package.json， package.json在src目录下
 
