@@ -23,7 +23,7 @@ export function MessageBubble({ message, onFeedback }: MessageBubbleProps) {
       <Card
         className={cn(
           'max-w-[85%] overflow-hidden',
-          isUser ? 'bg-primary text-primary-foreground' : 'bg-muted'
+          isUser ? 'bg-muted' : 'bg-background'
         )}
       >
         <div className="p-4">
