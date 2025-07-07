@@ -5,7 +5,8 @@ import {
     DashScopeRequest,
     DashScopeResponse,
     DashScopeError,
-    DashScopeServiceOptions
+    DashScopeServiceOptions,
+    Message
 } from './types';
 
 class SSETransformer extends Transform {
@@ -91,17 +92,29 @@ export class DashScopeService {
 
     public async askQuestion(
         prompt: string,
-        options: DashScopeServiceOptions = {}
+        options: DashScopeServiceOptions = {},
+        messages: Message[] = []
     ): Promise<void> {
         const url = `https://dashscope.aliyuncs.com/api/v1/apps/${this.appId}/completion`;
         const startTime = Date.now();
 
         console.log(`[DashScope] 开始请求 - ${new Date().toISOString()}`);
         console.log(`[DashScope] Prompt: ${prompt.substring(0, 100)}...`);
+        console.log(`[DashScope] 消息历史数量: ${messages.length}`);
+
+        // 构建包含历史对话的完整prompt
+        let fullPrompt = prompt;
+        if (messages.length > 0) {
+            const conversationHistory = messages.map(msg => 
+                `${msg.role === 'user' ? '用户' : 'AI'}: ${msg.content}`
+            ).join('\n');
+            fullPrompt = `对话历史:\n${conversationHistory}\n\n当前问题: ${prompt}`;
+        }
 
         const data: DashScopeRequest = {
             input: {
-                prompt
+                prompt: fullPrompt,
+                messages
             },
             parameters: {
                 'incremental_output': 'true',

@@ -5,20 +5,27 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 
+// 定义消息类型
+interface Message {
+    id: string;
+    role: 'user' | 'assistant';
+    content: string;
+    timestamp: number;
+}
+
 export default function TestApiPage() {
     const [prompt, setPrompt] = useState('');
-    const [response, setResponse] = useState('');
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [currentResponse, setCurrentResponse] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const responseRef = useRef<HTMLDivElement>(null);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
-    // 自动滚动到最新响应
+    // 自动滚动到最新消息
     useEffect(() => {
-        if (responseRef.current) {
-            responseRef.current.scrollTop = responseRef.current.scrollHeight;
-        }
-    }, [response]);
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages, currentResponse]);
 
     // 清理超时定时器
     useEffect(() => {
@@ -36,12 +43,30 @@ export default function TestApiPage() {
         }
     };
 
+    const generateId = () => `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+    const clearConversation = () => {
+        setMessages([]);
+        setCurrentResponse('');
+        setError(null);
+    };
+
     const handleSubmit = async () => {
         if (!prompt.trim()) return;
 
+        const userMessage: Message = {
+            id: generateId(),
+            role: 'user',
+            content: prompt.trim(),
+            timestamp: Date.now()
+        };
+
+        // 添加用户消息到历史
+        setMessages(prev => [...prev, userMessage]);
+        setPrompt(''); // 清空输入框
         setIsLoading(true);
         setError(null);
-        setResponse('');
+        setCurrentResponse('');
 
         // 设置30秒超时
         timeoutRef.current = setTimeout(() => {
@@ -55,7 +80,10 @@ export default function TestApiPage() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ prompt }),
+                body: JSON.stringify({ 
+                    prompt: userMessage.content,
+                    messages: messages // 发送消息历史
+                }),
             });
 
             if (!response.ok) {
@@ -68,6 +96,8 @@ export default function TestApiPage() {
             if (!reader) {
                 throw new Error('无法读取响应流');
             }
+
+            let assistantResponseContent = '';
 
             // 处理流式响应
             try {
@@ -91,13 +121,26 @@ export default function TestApiPage() {
                                 if (data.error) {
                                     setError(data.error);
                                 } else if (data.text) {
-                                    setResponse(prev => prev + data.text);
+                                    assistantResponseContent += data.text;
+                                    setCurrentResponse(assistantResponseContent);
                                 }
                             } catch (e) {
                                 console.error('解析响应数据失败:', e);
                             }
                         }
                     });
+                }
+
+                // 流结束后，将完整的AI回复添加到消息历史
+                if (assistantResponseContent) {
+                    const assistantMessage: Message = {
+                        id: generateId(),
+                        role: 'assistant',
+                        content: assistantResponseContent,
+                        timestamp: Date.now()
+                    };
+                    setMessages(prev => [...prev, assistantMessage]);
+                    setCurrentResponse(''); // 清空当前响应显示
                 }
             } catch (streamError) {
                 console.error('流式响应处理失败:', streamError);
@@ -112,22 +155,14 @@ export default function TestApiPage() {
 
     return (
         <div className="container mx-auto p-4 max-w-4xl">
-            <h1 className="text-2xl font-bold mb-4">DashScope API 测试</h1>
-            
-            <div className="flex gap-2 mb-4">
-                <Input
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="输入你的问题..."
-                    onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
-                    disabled={isLoading}
-                    className="flex-1"
-                />
+            <div className="flex justify-between items-center mb-4">
+                <h1 className="text-2xl font-bold">DashScope API 多轮对话测试</h1>
                 <Button 
-                    onClick={handleSubmit}
-                    disabled={isLoading || !prompt.trim()}
+                    variant="outline" 
+                    onClick={clearConversation}
+                    disabled={isLoading}
                 >
-                    {isLoading ? '请求中...' : '发送'}
+                    清空对话
                 </Button>
             </div>
 
@@ -137,14 +172,73 @@ export default function TestApiPage() {
                 </div>
             )}
 
-            <Card className="p-4">
-                <div
-                    ref={responseRef}
-                    className="whitespace-pre-wrap h-[400px] overflow-y-auto"
-                >
-                    {response || '响应将在这里显示...'}
+            {/* 对话历史显示区域 */}
+            <Card className="p-4 mb-4 h-[500px] overflow-y-auto">
+                <div className="space-y-4">
+                    {messages.length === 0 && !currentResponse && (
+                        <div className="text-gray-500 text-center py-8">
+                            开始你的第一轮对话吧！
+                        </div>
+                    )}
+                    
+                    {messages.map((message) => (
+                        <div
+                            key={message.id}
+                            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                        >
+                            <div
+                                className={`max-w-[80%] p-3 rounded-lg ${
+                                    message.role === 'user'
+                                        ? 'bg-blue-500 text-white ml-auto'
+                                        : 'bg-gray-100 text-gray-900'
+                                }`}
+                            >
+                                <div className="whitespace-pre-wrap">{message.content}</div>
+                                <div className={`text-xs mt-1 opacity-70`}>
+                                    {new Date(message.timestamp).toLocaleTimeString()}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
+                    {/* 显示当前AI响应（实时流式） */}
+                    {currentResponse && (
+                        <div className="flex justify-start">
+                            <div className="max-w-[80%] p-3 rounded-lg bg-gray-100 text-gray-900">
+                                <div className="whitespace-pre-wrap">{currentResponse}</div>
+                                <div className="text-xs mt-1 opacity-70">
+                                    正在回复...
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div ref={messagesEndRef} />
                 </div>
             </Card>
+
+            {/* 输入区域 */}
+            <div className="flex gap-2">
+                <Input
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    placeholder="输入你的问题..."
+                    onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSubmit()}
+                    disabled={isLoading}
+                    className="flex-1"
+                />
+                <Button 
+                    onClick={handleSubmit}
+                    disabled={isLoading || !prompt.trim()}
+                >
+                    {isLoading ? '发送中...' : '发送'}
+                </Button>
+            </div>
+
+            {/* 对话统计信息 */}
+            <div className="mt-2 text-sm text-gray-500 text-center">
+                当前对话包含 {messages.length} 条消息
+            </div>
         </div>
     );
 } 

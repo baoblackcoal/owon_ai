@@ -3,9 +3,19 @@ export interface DashScopeConfig {
     appId: string;
 }
 
+// 添加消息类型
+export interface Message {
+    id: string;
+    role: 'user' | 'assistant';
+    content: string;
+    timestamp: number;
+}
+
+// 更新DashScopeRequest以支持消息历史
 export interface DashScopeRequest {
     input: {
         prompt: string;
+        messages?: Message[]; // 添加消息历史支持
     };
     parameters: {
         incremental_output: string;
@@ -46,4 +56,10 @@ export interface DashScopeServiceOptions {
     onStream?: StreamHandler;
     onError?: ErrorHandler;
     onComplete?: CompletionHandler;
+}
+
+// 对话上下文类型
+export interface ConversationContext {
+    messages: Message[];
+    currentQuestion: string;
 } 

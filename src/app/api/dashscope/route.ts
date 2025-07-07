@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 import { DashScopeService } from '@/lib/dashscope/service';
+import { Message } from '@/lib/dashscope/types';
 
 // 环境变量类型检查
 const getEnvVar = (name: string): string => {
@@ -17,7 +18,7 @@ export async function POST(request: NextRequest) {
 
         // 获取请求数据
         const data = await request.json();
-        const { prompt } = data;
+        const { prompt, messages = [] } = data;
 
         if (!prompt) {
             return new Response(JSON.stringify({ error: '缺少必要的 prompt 参数' }), {
@@ -25,6 +26,12 @@ export async function POST(request: NextRequest) {
                 headers: { 'Content-Type': 'application/json' }
             });
         }
+
+        // 验证消息历史格式
+        const validMessages: Message[] = Array.isArray(messages) ? 
+            messages.filter((msg: any) => 
+                msg && typeof msg.role === 'string' && typeof msg.content === 'string'
+            ) : [];
 
         // 创建响应流
         const encoder = new TextEncoder();
@@ -67,7 +74,7 @@ export async function POST(request: NextRequest) {
                         console.error('关闭写入器失败:', closeError);
                     }
                 }
-            });
+            }, validMessages);
         } catch (serviceError) {
             console.error('DashScope服务错误:', serviceError);
             try {
