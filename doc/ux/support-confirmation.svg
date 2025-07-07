@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="500" height="400" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景遮罩 -->
+  <rect width="500" height="400" fill="#000000" opacity="0.7"/>
+  
+  <!-- 模态框 -->
+  <rect x="100" y="80" width="300" height="240" rx="12" fill="#2c3e50" stroke="#485563" stroke-width="1"
+        filter="drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4))"/>
+  
+  <!-- 成功图标 -->
+  <circle cx="250" cy="140" r="24" fill="#27ae60" stroke="#2ecc71" stroke-width="2"/>
+  <path d="M238 140 L246 148 L262 132" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- 标题 -->
+  <text x="250" y="185" font-family="Arial, sans-serif" font-size="18" fill="#ffffff" font-weight="600" text-anchor="middle">请求提交成功</text>
+  
+  <!-- 工单信息 -->
+  <g id="ticket-info">
+    <text x="250" y="210" font-family="Arial, sans-serif" font-size="13" fill="#bdc3c7" text-anchor="middle">工单编号: </text>
+    <text x="250" y="225" font-family="Arial, sans-serif" font-size="14" fill="#ffffff" font-weight="600" text-anchor="middle">#SUP-20241201-001</text>
+    
+    <text x="250" y="245" font-family="Arial, sans-serif" font-size="12" fill="#bdc3c7" text-anchor="middle">预计回复时间: 24小时内</text>
+  </g>
+  
+  <!-- 邮件通知说明 -->
+  <rect x="120" y="260" width="260" height="35" rx="6" fill="#1a2332" stroke="#3498db" stroke-width="1"/>
+  <text x="130" y="275" font-family="Arial, sans-serif" font-size="11" fill="#3498db">📧 我们已向您的邮箱发送确认信息</text>
+  <text x="130" y="287" font-family="Arial, sans-serif" font-size="10" fill="#3498db">技术专家将尽快为您处理问题</text>
+  
+  <!-- 确定按钮 -->
+  <rect x="200" y="305" width="100" height="32" rx="6" fill="#e74c3c"/>
+  <text x="250" y="325" font-family="Arial, sans-serif" font-size="12" fill="white" text-anchor="middle">确定</text>
+</svg> 

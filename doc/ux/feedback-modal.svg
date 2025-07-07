@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="400" height="300" fill="#0f1419"/>
+  
+  <!-- 模拟聊天气泡上下文 -->
+  <rect x="20" y="20" width="360" height="80" rx="12" fill="#2c3e50" stroke="#485563" stroke-width="1"/>
+  <text x="30" y="40" font-family="Arial, sans-serif" font-size="14" fill="#ffffff" font-weight="600">AI回答:</text>
+  <text x="30" y="60" font-family="Arial, sans-serif" font-size="12" fill="#bdc3c7">根据您的问题，我建议检查设备的电源连接...</text>
+  <text x="30" y="80" font-family="Arial, sans-serif" font-size="12" fill="#bdc3c7">如果问题持续，请参考用户手册第3.2节。</text>
+  
+  <!-- 点踩按钮 -->
+  <circle cx="340" cy="85" r="12" fill="#e74c3c" stroke="#c0392b" stroke-width="1"/>
+  <text x="336" y="89" font-family="Arial, sans-serif" font-size="10" fill="white">👎</text>
+  
+  <!-- 反馈弹窗 -->
+  <rect x="180" y="110" width="200" height="170" rx="8" fill="#2c3e50" stroke="#485563" stroke-width="1" 
+        filter="drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3))"/>
+  
+  <!-- 弹窗标题 -->
+  <text x="190" y="130" font-family="Arial, sans-serif" font-size="14" fill="#ffffff" font-weight="600">请选择反馈原因</text>
+  
+  <!-- 反馈选项 -->
+  <g id="feedback-options">
+    <!-- 选项1 -->
+    <circle cx="195" cy="150" r="4" fill="none" stroke="#bdc3c7" stroke-width="1"/>
+    <text x="205" y="155" font-family="Arial, sans-serif" font-size="12" fill="#ecf0f1">答案不准确</text>
+    
+    <!-- 选项2 -->
+    <circle cx="195" cy="170" r="4" fill="none" stroke="#bdc3c7" stroke-width="1"/>
+    <text x="205" y="175" font-family="Arial, sans-serif" font-size="12" fill="#ecf0f1">与问题无关</text>
+    
+    <!-- 选项3 -->
+    <circle cx="195" cy="190" r="4" fill="none" stroke="#bdc3c7" stroke-width="1"/>
+    <text x="205" y="195" font-family="Arial, sans-serif" font-size="12" fill="#ecf0f1">信息过时</text>
+    
+    <!-- 选项4 (选中状态) -->
+    <circle cx="195" cy="210" r="4" fill="#e74c3c" stroke="#c0392b" stroke-width="1"/>
+    <circle cx="195" cy="210" r="2" fill="#ffffff"/>
+    <text x="205" y="215" font-family="Arial, sans-serif" font-size="12" fill="#ff6b35" font-weight="500">需要人工支持</text>
+    
+  </g>
+  
+  <!-- 按钮区域 -->
+  <g id="buttons">
+    <!-- 取消按钮 -->
+    <rect x="190" y="250" width="50" height="24" rx="4" fill="none" stroke="#485563" stroke-width="1"/>
+    <text x="210" y="265" font-family="Arial, sans-serif" font-size="11" fill="#bdc3c7" text-anchor="middle">取消</text>
+    
+    <!-- 提交按钮 -->
+    <rect x="250" y="250" width="70" height="24" rx="4" fill="#e74c3c"/>
+    <text x="285" y="265" font-family="Arial, sans-serif" font-size="11" fill="white" text-anchor="middle">提交反馈</text>
+  </g>
+  
+  <!-- 箭头指向点踩按钮 -->
+  <path d="M280 150 L320 110" stroke="#94a3b8" stroke-width="1" marker-end="url(#arrowhead)" stroke-dasharray="3,3"/>
+  
+  <!-- 箭头标记定义 -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#94a3b8"/>
+    </marker>
+  </defs>
+  
+  <!-- 说明文字 -->
+  <text x="20" y="290" font-family="Arial, sans-serif" font-size="11" fill="#6b7280">
+    点击"需要人工支持"将进入人工支持申请流程
+  </text>
+</svg> 

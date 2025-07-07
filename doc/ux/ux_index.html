@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OWON AI 助手 - UX 原型设计</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #ecf0f1;
+            background: linear-gradient(135deg, #0f1419, #1a2332);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #e74c3c, #ff6b35);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .prototype-section {
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid #485563;
+        }
+        
+        .prototype-title {
+            font-size: 1.8em;
+            color: #ffffff;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+        
+        .prototype-description {
+            background: linear-gradient(135deg, #1a2332, #2c3e50);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ff6b35;
+            border: 1px solid #485563;
+        }
+        
+        .prototype-image {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .prototype-image svg {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #485563;
+            border-radius: 8px;
+            background: #1a2332;
+        }
+        
+        .features-list {
+            margin: 20px 0;
+        }
+        
+        .features-list h4 {
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        
+        .features-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .features-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #485563;
+            color: #bdc3c7;
+        }
+        
+        .features-list li:before {
+            content: "✓";
+            color: #ff6b35;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .navigation {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            border: 1px solid #485563;
+            z-index: 1000;
+        }
+        
+        .navigation ul {
+            list-style: none;
+        }
+        
+        .navigation li {
+            margin: 10px 0;
+        }
+        
+        .navigation a {
+            color: #ff6b35;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: color 0.3s;
+        }
+        
+        .navigation a:hover {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .tech-stack {
+            background: linear-gradient(135deg, #1a2332, #2c3e50);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #485563;
+        }
+        
+        .tech-stack h4 {
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+        
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .tech-tag {
+            background: linear-gradient(135deg, #e74c3c, #ff6b35);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .comparison-item {
+            border: 1px solid #485563;
+            border-radius: 8px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+        }
+        
+        .comparison-item h5 {
+            background: linear-gradient(135deg, #1a2332, #2c3e50);
+            padding: 15px;
+            margin: 0;
+            color: #ffffff;
+            border-bottom: 1px solid #485563;
+        }
+        
+        .comparison-item .image-container {
+            padding: 15px;
+            text-align: center;
+            background: #1a2332;
+        }
+        
+        .update-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b35, #e74c3c);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin-left: 10px;
+            box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .navigation {
+                display: none;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>OWON AI 助手</h1>
+            <p class="subtitle">Phase 1: MVP - UX 原型设计展示 <span class="update-badge">已更新</span></p>
+        </header>
+
+        <!-- 项目概述 -->
+        <div class="prototype-section">
+            <h2 class="prototype-title">项目概述</h2>
+            <div class="prototype-description">
+                <p>本项目旨在为 OWON 仪器仪表用户构建一个智能化的 AI 助手网页应用。MVP 阶段专注于核心功能：<strong>文字问答、多对话管理、人工支持工作流和增强版管理后台</strong>。</p>
+                <p><strong>Phase 1 功能范围</strong>：</p>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li><strong>仅限文字</strong>的AI问答，支持流式输出和Markdown渲染</li>
+                    <li>对话历史记录（仅限注册用户）</li>
+                    <li>AI回答的点赞/点踩功能</li>
+                    <li><strong>基础的管理员后台</strong>：能查看所有用户和问答流（点赞，点踩的过滤）</li>
+                    <li><strong>上线人工支持工作流</strong>（请求、后台处理、邮件通知）</li>
+                </ul>
+                <p><strong>重要更新</strong>：将问答历史功能整合到主界面，实现真正的多对话管理体验，用户可以在历史对话中无缝继续聊天。新增完整的人工支持工作流，当AI无法满足用户需求时可请求人工技术专家协助。</p>
+            </div>
+            
+            <div class="tech-stack">
+                <h4>技术栈</h4>
+                <div class="tech-tags">
+                    <span class="tech-tag">Django</span>
+                    <span class="tech-tag">HTMX</span>
+                    <span class="tech-tag">Alpine.js</span>
+                    <span class="tech-tag">Tailwind CSS</span>
+                    <span class="tech-tag">Supabase</span>
+                    <span class="tech-tag">阿里云百炼</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 统一主界面 -->
+        <div class="prototype-section" id="unified-interface">
+            <h2 class="prototype-title">1. 统一主界面 <span class="update-badge">全新设计</span></h2>
+            <div class="prototype-description">
+                <p>这是应用的核心界面，整合了聊天功能和历史对话管理。通过可收缩的左侧导航栏，用户可以在多个对话线程间轻松切换，并且能够在任何历史对话中继续提问。</p>
+            </div>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h5>展开状态 - 完整对话管理</h5>
+                    <div class="image-container">
+                        <object data="main-chat.svg" type="image/svg+xml" width="100%" height="400"></object>
+                    </div>
+                </div>
+                <div class="comparison-item">
+                    <h5>收缩状态 - 专注聊天体验</h5>
+                    <div class="image-container">
+                        <object data="main-chat-collapsed.svg" type="image/svg+xml" width="100%" height="400"></object>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="features-list">
+                <h4>核心功能特性：</h4>
+                <ul>
+                    <li>可收缩/展开的左侧导航栏，支持平滑动画过渡</li>
+                    <li>"新建聊天"按钮快速创建新的对话线程</li>
+                    <li>历史对话列表按时间倒序排列，当前对话高亮显示</li>
+                    <li>用户可以在任何历史对话中继续提问和互动</li>
+                    <li>收缩状态下仅显示图标，节省屏幕空间</li>
+                    <li>汉堡菜单控制导航栏的显示/隐藏</li>
+                    <li>保持原有的聊天界面体验（流式输出、点赞/点踩等）</li>
+                </ul>
+            </div>
+            
+            <div class="features-list">
+                <h4>交互改进：</h4>
+                <ul>
+                    <li>展开状态：280px 宽度，显示完整对话标题和时间</li>
+                    <li>收缩状态：60px 宽度，仅显示圆点指示器</li>
+                    <li>点击对话项立即切换到该对话，内容淡入淡出过渡</li>
+                    <li>输入框占位符显示"继续在此对话中提问..."</li>
+                    <li>对话标题区显示"可继续对话"提示</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 登录注册模态框 -->
+        <div class="prototype-section" id="login-modal">
+            <h2 class="prototype-title">2. 登录/注册模态框</h2>
+            <div class="prototype-description">
+                <p>当游客尝试使用高级功能或达到使用限制时，会弹出此模态框引导用户注册。设计简洁明了，支持快速切换登录和注册视图。</p>
+            </div>
+            
+            <div class="prototype-image">
+                <object data="login-modal.svg" type="image/svg+xml" width="100%" height="600"></object>
+            </div>
+            
+            <div class="features-list">
+                <h4>交互特性：</h4>
+                <ul>
+                    <li>模态框覆盖主界面，背景半透明遮罩</li>
+                    <li>登录和注册视图可无缝切换</li>
+                    <li>邮箱和密码输入框带占位符提示</li>
+                    <li>实时表单验证和错误提示</li>
+                    <li>右上角关闭按钮可关闭模态框</li>
+                    <li>注册需要邮箱验证激活</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 点踩反馈弹窗 -->
+        <div class="prototype-section" id="feedback-modal">
+            <h2 class="prototype-title">3. 点踩反馈弹窗</h2>
+            <div class="prototype-description">
+                <p>当用户对AI回答不满意并点击"👎"按钮时弹出的反馈选择界面。提供多种预设选项，其中"需要人工支持"是进入人工服务的重要入口。</p>
+            </div>
+            
+            <div class="prototype-image">
+                <object data="feedback-modal.svg" type="image/svg+xml" width="100%" height="400"></object>
+            </div>
+            
+            <div class="features-list">
+                <h4>交互特性：</h4>
+                <ul>
+                    <li>点击点踩按钮即时弹出，提供快速反馈通道</li>
+                    <li>四种预设反馈原因：不准确、无关、过时、需要人工支持</li>
+                    <li>单选设计，避免用户选择困难</li>
+                    <li>选择"需要人工支持"后自动进入人工支持申请流程</li>
+                    <li>简洁的弹窗设计，不干扰主界面</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 人工支持请求表单 -->
+        <div class="prototype-section" id="support-request">
+            <h2 class="prototype-title">4. 人工支持请求表单</h2>
+            <div class="prototype-description">
+                <p>用户选择"需要人工支持"后显示的详细申请表单。收集必要的问题信息，同时自动包含相关的AI对话上下文，帮助技术专家更好地理解问题。</p>
+            </div>
+            
+            <div class="prototype-image">
+                <object data="support-request-form.svg" type="image/svg+xml" width="100%" height="650"></object>
+            </div>
+            
+            <div class="features-list">
+                <h4>表单功能：</h4>
+                <ul>
+                    <li>问题类型分类：技术问题、产品咨询、故障排除、其他</li>
+                    <li>详细描述文本框，支持用户描述具体问题</li>
+                    <li>联系邮箱预填当前用户邮箱，可手动修改</li>
+                    <li>自动包含相关AI对话上下文</li>
+                    <li>可选择是否包含完整对话历史</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 人工支持确认页面 -->
+        <div class="prototype-section" id="support-confirmation">
+            <h2 class="prototype-title">5. 人工支持确认页面</h2>
+            <div class="prototype-description">
+                <p>用户提交人工支持请求后的确认界面。提供明确的成功反馈，并告知用户后续流程和预期时间。</p>
+            </div>
+            
+            <div class="prototype-image">
+                <object data="support-confirmation.svg" type="image/svg+xml" width="100%" height="400"></object>
+            </div>
+            
+            <div class="features-list">
+                <h4>确认信息：</h4>
+                <ul>
+                    <li>绿色勾选图标提供清晰的成功视觉反馈</li>
+                    <li>生成唯一工单编号，便于后续跟踪</li>
+                    <li>明确告知预计回复时间（24小时内）</li>
+                    <li>确认邮件通知已发送到用户邮箱</li>
+                    <li>简洁的确认界面，提升用户信心</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 管理员后台 - 用户管理 -->
+        <div class="prototype-section" id="admin-panel">
+            <h2 class="prototype-title">6. 管理员后台 - 用户管理</h2>
+            <div class="prototype-description">
+                <p>管理员后台的用户管理模块，用于查看和管理所有注册用户。采用传统的侧边栏 + 主内容区布局，功能清晰直观。</p>
+            </div>
+            
+            <div class="prototype-image">
+                <object data="admin-panel.svg" type="image/svg+xml" width="100%" height="600"></object>
+            </div>
+            
+            <div class="features-list">
+                <h4>管理功能：</h4>
+                <ul>
+                    <li>深色侧边栏导航，视觉层次清晰</li>
+                    <li>用户统计卡片显示关键指标</li>
+                    <li>用户列表表格展示详细信息</li>
+                    <li>用户状态标识（正常/受限/禁用）</li>
+                    <li>支持按邮箱搜索用户</li>
+                    <li>用户操作按钮（查看/禁用/解封）</li>
+                    <li>分页导航支持大量数据浏览</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 管理员后台 - 人工支持工单 -->
+        <div class="prototype-section" id="admin-support">
+            <h2 class="prototype-title">7. 管理员后台 - 人工支持工单 <span class="update-badge">新增</span></h2>
+            <div class="prototype-description">
+                <p>人工支持工单管理界面，是Phase 1新增的核心功能。技术专家可以在此处理用户的人工支持请求，查看完整的问题描述和AI对话上下文，并直接回复用户。</p>
+            </div>
+            
+            <div class="prototype-image">
+                <object data="admin-enhanced.svg" type="image/svg+xml" width="100%" height="800"></object>
+            </div>
+            
+            <div class="features-list">
+                <h4>工单管理功能：</h4>
+                <ul>
+                    <li>工单状态统计卡片：待处理、处理中、已完成、已关闭</li>
+                    <li>多维度筛选：按状态、时间范围筛选工单</li>
+                    <li>工单列表展示：ID、用户邮箱、问题类型、提交时间、状态</li>
+                    <li>工单详情预览：在下方区域显示完整的工单信息</li>
+                    <li>AI对话上下文：显示用户的原始问题和AI回答</li>
+                    <li>在线回复编辑器：技术专家可直接回复用户问题</li>
+                    <li>工单操作：发送回复、更改状态、关闭工单等</li>
+                </ul>
+            </div>
+            
+            <div class="features-list">
+                <h4>工作流程：</h4>
+                <ul>
+                    <li>用户点踩AI回答并申请人工支持</li>
+                    <li>系统自动创建工单并发送邮件确认</li>
+                    <li>管理员后台显示新工单，按时间排序</li>
+                    <li>技术专家查看工单详情和AI对话上下文</li>
+                    <li>技术专家撰写详细的解决方案并回复</li>
+                    <li>系统发送回复邮件给用户</li>
+                    <li>工单状态更新为已完成或已关闭</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 问答排行榜 -->
+        <div class="prototype-section" id="qa-ranking">
+            <h2 class="prototype-title">8. 问答排行榜 <span class="update-badge">新增</span></h2>
+            <div class="prototype-description">
+                <p>问答排行榜功能展示最受欢迎的问题和答案，基于点赞数、回答质量、问题频率等多维度权重计算。用户可以通过排行榜发现热门问题，获取高质量的技术解答，同时为产品优化提供数据支撑。</p>
+            </div>
+            
+            <div class="prototype-image">
+                <object data="qa-ranking.svg" type="image/svg+xml" width="100%" height="800"></object>
+            </div>
+            
+            <div class="features-list">
+                <h4>排行榜功能：</h4>
+                <ul>
+                    <li>多维度热度计算：综合考虑点赞数、回答次数、用户关注度</li>
+                    <li>分类展示：本周热门、全部时间、我的关注</li>
+                    <li>排行榜列表：显示问题标题、描述、统计数据、排名</li>
+                    <li>详细统计：点赞数、评论数、热度百分比、发布时间</li>
+                    <li>金银铜牌标识：前三名采用不同颜色的排名徽章</li>
+                    <li>查看详情：点击问题可查看完整内容和AI回答</li>
+                    <li>快速提问：浮动按钮支持基于热门问题发起新提问</li>
+                </ul>
+            </div>
+            
+            <div class="features-list">
+                <h4>用户交互：</h4>
+                <ul>
+                    <li>筛选选项卡：用户可以切换不同的时间维度查看热门问题</li>
+                    <li>分页导航：支持浏览更多历史热门问题</li>
+                    <li>问题互动：用户可以对排行榜中的问题进行点赞</li>
+                    <li>相关提问：基于热门问题发起新的相关提问</li>
+                    <li>左侧导航：通过专用入口快速访问排行榜页面</li>
+                </ul>
+            </div>
+            
+            <div class="features-list">
+                <h4>数据价值：</h4>
+                <ul>
+                    <li>用户需求洞察：识别用户最关心的技术问题领域</li>
+                    <li>产品优化指导：为产品团队提供用户痛点数据</li>
+                    <li>知识库建设：热门问题作为官方文档的重要补充</li>
+                    <li>社区活跃度：提升用户参与度和平台粘性</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 设计原则 -->
+        <div class="prototype-section">
+            <h2 class="prototype-title">设计原则与规范</h2>
+            <div class="prototype-description">
+                <p>所有原型设计遵循以下核心原则，确保用户体验的一致性和可用性，特别针对多对话管理场景进行了优化。</p>
+            </div>
+            
+            <div class="features-list">
+                <h4>色彩规范：</h4>
+                <ul>
+                    <li>主色调：#3b82f6（品牌蓝）</li>
+                    <li>成功色：#10b981（绿色）</li>
+                    <li>警告色：#f59e0b（橙色）</li>
+                    <li>危险色：#dc2626（红色）</li>
+                    <li>中性色：#64748b（灰色系）</li>
+                </ul>
+            </div>
+            
+            <div class="features-list">
+                <h4>新增交互规范：</h4>
+                <ul>
+                    <li>左侧导航栏收缩/展开动画时长：300ms</li>
+                    <li>对话切换时内容区淡入淡出效果</li>
+                    <li>悬浮时对话列表项显示操作按钮（删除、重命名等）</li>
+                    <li>当前选中对话项始终保持高亮状态</li>
+                    <li>收缩状态下的圆点指示器支持悬浮提示</li>
+                </ul>
+            </div>
+            
+            <div class="features-list">
+                <h4>响应式设计：</h4>
+                <ul>
+                    <li>桌面端（>1024px）：默认展开导航栏</li>
+                    <li>平板端（768-1024px）：默认收缩，支持展开</li>
+                    <li>移动端（<768px）：完全隐藏，通过汉堡菜单唤出</li>
+                    <li>所有尺寸下都保持核心聊天功能可用</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 更新说明 -->
+        <div class="prototype-section">
+            <h2 class="prototype-title">更新说明</h2>
+            <div class="prototype-description">
+                <p>本次更新的主要改进和设计决策说明。</p>
+            </div>
+            
+            <div class="features-list">
+                <h4>主要更新：</h4>
+                <ul>
+                    <li>将独立的问答历史页面整合到主界面中</li>
+                    <li>实现真正的多对话管理，用户可以在历史对话中继续聊天</li>
+                    <li>增加可收缩的左侧导航栏，提升空间利用率</li>
+                    <li>新增"新建聊天"功能，支持多个独立对话线程</li>
+                    <li><strong>新增完整的人工支持工作流</strong>：点踩反馈 → 申请表单 → 确认页面</li>
+                    <li><strong>新增问答排行榜功能</strong>：热门问题展示、多维度排序、用户互动</li>
+                    <li><strong>增强管理员后台</strong>：新增人工支持工单管理功能</li>
+                    <li>优化了导航体验，减少页面跳转</li>
+                </ul>
+            </div>
+            
+            <div class="features-list">
+                <h4>设计优势：</h4>
+                <ul>
+                    <li>统一界面减少了用户的学习成本</li>
+                    <li>多对话管理类似现代聊天应用的体验</li>
+                    <li>可收缩导航栏在不同设备上都有良好体验</li>
+                    <li>保持了聊天的连续性和上下文</li>
+                    <li>人工支持工作流提供了AI之外的服务保障</li>
+                    <li>完整的工单管理系统支持技术专家高效处理用户问题</li>
+                    <li>问答排行榜提升用户参与度，为产品优化提供数据洞察</li>
+                    <li>为未来功能扩展（如对话分组、搜索等）预留了空间</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 右侧导航 -->
+    <nav class="navigation">
+        <ul>
+            <li><a href="#unified-interface">统一主界面</a></li>
+            <li><a href="#login-modal">登录/注册</a></li>
+            <li><a href="#feedback-modal">点踩反馈</a></li>
+            <li><a href="#support-request">人工支持申请</a></li>
+            <li><a href="#support-confirmation">申请确认</a></li>
+            <li><a href="#admin-panel">用户管理</a></li>
+            <li><a href="#admin-support">工单管理</a></li>
+            <li><a href="#qa-ranking">问答排行榜</a></li>
+        </ul>
+    </nav>
+
+    <script>
+        // 平滑滚动导航
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // SVG 加载失败时的回退处理
+        document.querySelectorAll('object[type="image/svg+xml"]').forEach(obj => {
+            obj.addEventListener('error', function() {
+                this.style.display = 'none';
+                const fallback = document.createElement('div');
+                fallback.innerHTML = '<p style="text-align: center; padding: 50px; color: #64748b;">SVG 文件加载失败，请检查文件路径</p>';
+                this.parentNode.appendChild(fallback);
+            });
+        });
+    </script>
+</body>
+</html> 

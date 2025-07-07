@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景遮罩 -->
+  <rect width="1200" height="800" fill="#000000" opacity="0.7"/>
+  
+  <!-- 模态框背景 -->
+  <rect x="400" y="200" width="400" height="400" rx="12" fill="#2c3e50" stroke="#485563"/>
+  
+  <!-- 关闭按钮 -->
+  <circle cx="770" cy="230" r="12" fill="#34495e" stroke="#485563"/>
+  <text x="770" y="235" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#bdc3c7">×</text>
+  
+  <!-- 登录视图 -->
+  <g id="login-view">
+    <!-- 标题 -->
+    <text x="600" y="260" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#ffffff">登录</text>
+    
+    <!-- 邮箱输入框 -->
+    <text x="440" y="310" font-family="Arial, sans-serif" font-size="14" fill="#ecf0f1">邮箱</text>
+    <rect x="440" y="320" width="320" height="40" rx="6" fill="#34495e" stroke="#485563"/>
+    <text x="450" y="343" font-family="Arial, sans-serif" font-size="14" fill="#95a5a6">请输入您的邮箱</text>
+    
+    <!-- 密码输入框 -->
+    <text x="440" y="385" font-family="Arial, sans-serif" font-size="14" fill="#ecf0f1">密码</text>
+    <rect x="440" y="395" width="320" height="40" rx="6" fill="#34495e" stroke="#485563"/>
+    <text x="450" y="418" font-family="Arial, sans-serif" font-size="14" fill="#95a5a6">请输入密码</text>
+    
+    <!-- 登录按钮 -->
+    <rect x="440" y="460" width="320" height="45" rx="6" fill="#e74c3c"/>
+    <text x="600" y="487" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">登录</text>
+    
+    <!-- 切换到注册的链接 -->
+    <text x="600" y="530" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#bdc3c7">
+      还没有账户？
+      <tspan fill="#ff6b35" text-decoration="underline">立即注册</tspan>
+    </text>
+  </g>
+  
+  <!-- 注册视图（隐藏状态，仅作示意） -->
+  <g id="register-view" opacity="0.3" transform="translate(450, 0)">
+    <!-- 标题 -->
+    <text x="150" y="260" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#ffffff">创建您的账户</text>
+    
+    <!-- 邮箱输入框 -->
+    <text x="-10" y="310" font-family="Arial, sans-serif" font-size="14" fill="#ecf0f1">邮箱</text>
+    <rect x="-10" y="320" width="320" height="40" rx="6" fill="#34495e" stroke="#485563"/>
+    
+    <!-- 密码输入框 -->
+    <text x="-10" y="385" font-family="Arial, sans-serif" font-size="14" fill="#ecf0f1">密码</text>
+    <rect x="-10" y="395" width="320" height="40" rx="6" fill="#34495e" stroke="#485563"/>
+    
+    <!-- 确认密码输入框 -->
+    <text x="-10" y="460" font-family="Arial, sans-serif" font-size="14" fill="#ecf0f1">确认密码</text>
+    <rect x="-10" y="470" width="320" height="40" rx="6" fill="#34495e" stroke="#485563"/>
+    
+    <!-- 注册按钮 -->
+    <rect x="-10" y="535" width="320" height="45" rx="6" fill="#27ae60"/>
+    <text x="150" y="562" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#ffffff">注册</text>
+  </g>
+  
+  <!-- 错误提示区域示例 -->
+  <rect x="440" y="550" width="320" height="30" rx="4" fill="#2c3e50" stroke="#e74c3c" opacity="0.9"/>
+  <text x="450" y="570" font-family="Arial, sans-serif" font-size="12" fill="#e74c3c">邮箱或密码错误，请重试</text>
+  
+  <!-- 标注说明 -->
+  <text x="20" y="30" font-family="Arial, sans-serif" font-size="12" fill="#bdc3c7">登录/注册模态框 - 登录视图</text>
+</svg> 
