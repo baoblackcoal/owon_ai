@@ -21,7 +21,7 @@ async function callDashScope() {
 
     const data = {
         input: {
-            prompt: "ADS800A的带宽是多少？"
+            prompt: "ADS800A的价格是多少？"
         },
         parameters: {
             'incremental_output': 'true',
