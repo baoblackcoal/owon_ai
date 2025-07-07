@@ -3,6 +3,34 @@ export interface DashScopeConfig {
     appId: string;
 }
 
+export interface DashScopeInput {
+    prompt: string;
+    session_id?: string;
+}
+
+export interface DashScopeParameters {
+    incremental_output: string;
+    has_thoughts: string;
+    rag_options: {
+        pipeline_ids: string[];
+    };
+}
+
+export interface DashScopeRequest {
+    input: DashScopeInput;
+    parameters: DashScopeParameters;
+    debug: Record<string, unknown>;
+}
+
+export interface DashScopeOutput {
+    text: string;
+    session_id?: string;
+}
+
+export interface DashScopeResponse {
+    output: DashScopeOutput;
+}
+
 // 添加消息类型
 export interface Message {
     id: string;
@@ -25,14 +53,6 @@ export interface DashScopeRequest {
         };
     };
     debug: Record<string, unknown>;
-}
-
-export interface DashScopeResponse {
-    output?: {
-        text?: string;
-    };
-    request_id?: string;
-    message?: string;
 }
 
 export interface DashScopeError {

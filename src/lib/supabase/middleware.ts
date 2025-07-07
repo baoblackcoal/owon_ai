@@ -53,6 +53,12 @@ export async function updateSession(request: NextRequest) {
       return response;
     }
 
+    
+    // Allow access to test routes
+    if (request.nextUrl.pathname.startsWith('/test/')) {
+      return response;
+    }
+
     // Redirect unauthenticated users to login page
     if (!user && request.nextUrl.pathname !== '/') {
       const redirectUrl = new URL('/auth/login', request.url);
