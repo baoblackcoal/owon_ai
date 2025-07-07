@@ -1,4 +1,4 @@
-import { ChatSession } from '../../types/chat';
+import { ChatSession, Message } from '../../types/chat';
 import { MessageBubble } from '../chat/MessageBubble';
 import { InputArea } from '../chat/InputArea';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -22,30 +22,34 @@ export function ChatArea({ session, onSendMessage, onUpdateFeedback }: ChatAreaP
   }
 
   return (
-    <div className="flex-1 flex flex-col h-full">
+    <div className="flex flex-col h-full">
       {/* 对话标题 */}
-      <div className="p-4 border-b">
+      <div className="p-4 border-b flex-none">
         <h2 className="text-lg font-medium">{session.title}</h2>
         <p className="text-sm text-muted-foreground">
           {new Date(session.lastMessageTime).toLocaleString()} · 可继续对话
         </p>
       </div>
 
-      {/* 消息列表 */}
-      <ScrollArea className="flex-1 p-4">
-        <div className="max-w-5xl mx-auto space-y-4">
-          {session.messages.map((message) => (
-            <MessageBubble
-              key={message.id}
-              message={message}
-              onFeedback={onUpdateFeedback}
-            />
-          ))}
-        </div>
-      </ScrollArea>
+      {/* 消息列表 - 使用flex-1使其填充剩余空间并可滚动 */}
+      <div className="flex-1 overflow-hidden">
+        <ScrollArea className="h-full p-4">
+          <div className="max-w-5xl mx-auto space-y-4">
+            {session.messages.map((message: Message) => (
+              <MessageBubble
+                key={message.id}
+                message={message}
+                onFeedback={onUpdateFeedback}
+              />
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
 
-      {/* 输入区域 */}
-      <InputArea onSend={onSendMessage} />
+      {/* 输入区域 - 使用flex-none使其不参与flex伸缩 */}
+      <div className="flex-none">
+        <InputArea onSend={onSendMessage} />
+      </div>
     </div>
   );
 } 

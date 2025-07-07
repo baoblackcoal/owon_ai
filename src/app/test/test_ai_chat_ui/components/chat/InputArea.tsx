@@ -55,8 +55,8 @@ export function InputArea({ onSend, disabled }: InputAreaProps) {
           <Send className="h-4 w-4" />
         </Button>
       </div>
-      <div className="text-xs text-muted-foreground mt-2">
-        按 Enter 发送，Shift + Enter 换行
+      <div className="text-xs text-muted-foreground mt-2 text-center" id="ai_chat_ui_input_area_tip">
+        AI回答未必准确，请核查
       </div>
     </div>
   );
