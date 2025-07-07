@@ -35,6 +35,11 @@ interface DashScopeResponse {
     message?: string;
 }
 
+interface ChatMessage {
+    prompt: string;
+    delay?: number; // 发送下一条消息前的延迟时间（毫秒）
+}
+
 class SSETransformer extends Transform {
     private buffer: string = '';
     private sessionId: string = '';
@@ -188,21 +193,89 @@ async function callDashScope(prompt: string, sessionId?: string): Promise<string
     }
 }
 
-async function runMultiRoundChat() {
+// 预定义的对话场景
+const chatScenarios = {
+    // 基础对话场景
+    basic: [
+        { prompt: "你是谁？" },
+        { prompt: "你有什么技能？", delay: 1000 }
+    ],
+    // 示波器问答场景
+    oscilloscope: [
+        { prompt: "ADS800A的带宽是多少？" },
+        { prompt: "它的采样率是多少？", delay: 1000 },
+        { prompt: "它支持哪些触发模式？", delay: 1000 }
+    ],
+    // 自定义场景 - 从命令行参数获取
+    custom: [] as ChatMessage[]
+};
+
+function parseArgs(): { scenario: string; messages: string[] } {
+    const args = process.argv.slice(2);
+    let scenario = 'basic';
+    const messages: string[] = [];
+
+    for (let i = 0; i < args.length; i++) {
+        switch (args[i]) {
+            case '--scenario':
+            case '-s':
+                scenario = args[++i] || 'basic';
+                break;
+            case '--message':
+            case '-m':
+                messages.push(args[++i]);
+                break;
+            case '--help':
+            case '-h':
+                showHelp();
+                process.exit(0);
+        }
+    }
+
+    return { scenario, messages };
+}
+
+function showHelp(): void {
+    console.log('\n多轮对话测试工具');
+    console.log('\n用法：');
+    console.log('  npx ts-node test_aliyun_api_multi_chat.ts [选项]');
+    console.log('\n选项：');
+    console.log('  --help, -h              显示帮助信息');
+    console.log('  --scenario, -s <name>   选择预定义场景 (basic, oscilloscope)');
+    console.log('  --message, -m <text>    添加自定义对话消息（可多次使用）');
+    console.log('\n示例：');
+    console.log('  运行基础场景：');
+    console.log('    npx ts-node test_aliyun_api_multi_chat.ts -s basic');
+    console.log('  运行示波器场景：');
+    console.log('    npx ts-node test_aliyun_api_multi_chat.ts -s oscilloscope');
+    console.log('  运行自定义对话：');
+    console.log('    npx ts-node test_aliyun_api_multi_chat.ts -m "ADS800A外观不错，请记住" -m "ADS800A有解码功能，请记住" -m "我刚才说了什么？"');
+    console.log('');
+}
+
+async function runMultiRoundChat(messages: ChatMessage[]): Promise<void> {
+    if (messages.length === 0) {
+        console.error("错误：没有指定任何对话消息");
+        return;
+    }
+
     try {
-        // 第一轮对话
-        console.log("\n=== 第一轮对话 ===");
-        const sessionId = await callDashScope("你是谁？");
+        let sessionId = '';
+        console.log(`\n=== 开始${messages.length}轮对话 ===`);
 
-        // 等待一下，避免请求太快
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        for (let i = 0; i < messages.length; i++) {
+            const message = messages[i];
+            
+            // 如果设置了延迟且不是第一条消息，则等待
+            if (i > 0 && message.delay) {
+                await new Promise(resolve => setTimeout(resolve, message.delay));
+            }
 
-        // 第二轮对话
-        console.log("\n=== 第二轮对话 ===");
-        await callDashScope("你有什么技能？", sessionId);
+            console.log(`\n=== 第${i + 1}轮对话 ===`);
+            sessionId = await callDashScope(message.prompt, sessionId);
+        }
 
-        // 可以继续添加更多轮次的对话...
-
+        console.log("\n=== 对话完成 ===");
     } catch (error) {
         if (error instanceof Error) {
             console.error("多轮对话测试失败:", error.message);
@@ -210,4 +283,25 @@ async function runMultiRoundChat() {
     }
 }
 
-runMultiRoundChat(); 
+// 主函数
+async function main(): Promise<void> {
+    const { scenario, messages } = parseArgs();
+    
+    // 如果提供了自定义消息，使用自定义消息
+    if (messages.length > 0) {
+        chatScenarios.custom = messages.map(msg => ({ prompt: msg, delay: 1000 }));
+        await runMultiRoundChat(chatScenarios.custom);
+    }
+    // 否则使用预定义场景
+    else if (scenario in chatScenarios) {
+        await runMultiRoundChat(chatScenarios[scenario as keyof typeof chatScenarios]);
+    }
+    else {
+        console.error(`错误：未知的场景 "${scenario}"`);
+        showHelp();
+        process.exit(1);
+    }
+}
+
+// 运行主函数
+main().catch(console.error); 

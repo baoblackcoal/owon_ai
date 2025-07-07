@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+    <defs>
+        <style type="text/css">
+            @font-face {
+                font-family: 'System Font';
+                src: local('-apple-system'), local('BlinkMacSystemFont'), local('Segoe UI'), local('Roboto');
+            }
+            text {
+                font-family: 'System Font', sans-serif;
+            }
+        </style>
+    </defs>
+    
+    <!-- 背景 -->
+    <rect width="800" height="600" fill="#ffffff"/>
+    
+    <!-- 标题栏 -->
+    <g transform="translate(20, 20)">
+        <text x="0" y="24" font-size="24" font-weight="bold" fill="#000000">DashScope API 多轮对话测试</text>
+        <rect x="650" y="0" width="100" height="32" rx="6" fill="none" stroke="#e2e8f0" stroke-width="2"/>
+        <text x="670" y="22" font-size="14" fill="#64748b">清空对话</text>
+    </g>
+
+
+    <!-- 聊天窗口 -->
+    <g transform="translate(20, 70)">
+        <!-- 聊天窗口背景 -->
+        <rect width="760" height="420" rx="8" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+
+        <!-- 用户消息示例 -->
+        <g transform="translate(380, 50)">
+            <rect x="0" y="0" width="360" height="60" rx="8" fill="#3b82f6"/>
+            <text x="20" y="30" font-size="14" fill="#ffffff">你好，请问ADS800A的带宽是多少？</text>
+        </g>
+
+        <!-- AI回复示例 -->
+        <g transform="translate(20, 130)">
+            <rect width="360" height="80" rx="8" fill="#f3f4f6"/>
+            <text x="20" y="30" font-size="14" fill="#111827">ADS800A示波器的带宽是800MHz...</text>
+        </g>
+
+        
+        <!-- 用户消息示例 -->
+        <g transform="translate(380, 250)">
+            <rect x="0" y="0" width="360" height="60" rx="8" fill="#3b82f6"/>
+            <text x="20" y="30" font-size="14" fill="#ffffff">你好，请问ADS900A的带宽是多少？</text>
+        </g>
+
+        <!-- AI回复示例 -->
+        <g transform="translate(20, 310)">
+            <rect width="360" height="80" rx="8" fill="#f3f4f6"/>
+            <text x="20" y="30" font-size="14" fill="#111827">ADS900A示波器的带宽是900MHz...</text>
+        </g>
+
+    </g>
+
+    <!-- 输入区域 -->
+    <g transform="translate(20, 520)">
+        <rect width="660" height="40" rx="6" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+        <text x="20" y="25" font-size="14" fill="#94a3b8">输入你的问题...</text>
+        
+        <!-- 发送按钮 -->
+        <rect x="680" y="0" width="80" height="40" rx="6" fill="#3b82f6"/>
+        <text x="700" y="25" font-size="14" fill="#ffffff">发送</text>
+    </g>
+
+    <!-- 常用问题按钮 -->
+    <g transform="translate(20, 570)">
+        <!-- 问题1 -->
+        <g transform="translate(0, 0)">
+            <rect width="240" height="30" rx="15" fill="#f3f4f6" stroke="#e2e8f0" stroke-width="1"/>
+            <text x="20" y="20" font-size="12" fill="#374151">ADS800A带宽是多少？</text>
+        </g>
+        
+        <!-- 问题2 -->
+        <g transform="translate(260, 0)">
+            <rect width="240" height="30" rx="15" fill="#f3f4f6" stroke="#e2e8f0" stroke-width="1"/>
+            <text x="20" y="20" font-size="12" fill="#374151">ADS800A采样率是多少？</text>
+        </g>
+        
+        <!-- 问题3 -->
+        <g transform="translate(520, 0)">
+            <rect width="100" height="30" rx="15" fill="#f3f4f6" stroke="#e2e8f0" stroke-width="1"/>
+            <text x="20" y="20" font-size="12" fill="#374151">你好</text>
+        </g>
+    </g>
+
+</svg> 
