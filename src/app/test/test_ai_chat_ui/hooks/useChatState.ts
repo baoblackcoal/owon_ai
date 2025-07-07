@@ -23,26 +23,23 @@ const initialState: ChatState = {
 };
 
 export function useChatState() {
-  const [chatState, setChatState] = useState<ChatState>(() => {
-    // 从 localStorage 读取状态
-    if (typeof window !== 'undefined') {
-      const savedState = localStorage.getItem(STORAGE_KEY);
-      if (savedState) {
-        const parsedState = JSON.parse(savedState);
-        return {
-          ...parsedState,
-          currentSession: parsedState.sessions[0],
-        };
-      }
+  const [chatState, setChatState] = useState<ChatState>(initialState);
+
+  // 从 localStorage 读取状态
+  useEffect(() => {
+    const savedState = localStorage.getItem(STORAGE_KEY);
+    if (savedState) {
+      const parsedState = JSON.parse(savedState);
+      setChatState({
+        ...parsedState,
+        currentSession: parsedState.sessions[0],
+      });
     }
-    return initialState;
-  });
+  }, []);
 
   // 保存状态到 localStorage
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(chatState));
-    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(chatState));
   }, [chatState]);
 
   // 切换侧边栏展开状态
@@ -91,7 +88,6 @@ export function useChatState() {
       timestamp: new Date().toISOString(),
     };
 
-    // 创建一个空的助手消息，用于流式更新
     const assistantMessage: Message = {
       id: uuidv4(),
       role: 'assistant',
@@ -105,12 +101,10 @@ export function useChatState() {
       lastMessageTime: new Date().toISOString(),
     };
 
-    // 如果是第一条消息，更新会话标题
     if (chatState.currentSession.messages.length === 0) {
       updatedSession.title = content.slice(0, 20) + (content.length > 20 ? '...' : '');
     }
 
-    // 更新状态以显示用户消息和空的助手消息
     setChatState((prev) => ({
       ...prev,
       sessions: prev.sessions.map((s) =>
@@ -120,7 +114,6 @@ export function useChatState() {
     }));
 
     try {
-      // 发送请求到 API
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -148,14 +141,13 @@ export function useChatState() {
               const data = JSON.parse(line.slice(5).trim());
               if (data.text) {
                 accumulatedContent += data.text;
-                // 更新助手消息的内容
                 setChatState((prev) => ({
                   ...prev,
                   sessions: prev.sessions.map((s) =>
                     s.id === updatedSession.id
                       ? {
                           ...s,
-                          messages: s.messages.map((m) =>
+                          messages: s.messages.map((m: Message) =>
                             m.id === assistantMessage.id
                               ? { ...m, content: accumulatedContent }
                               : m
@@ -167,7 +159,7 @@ export function useChatState() {
                     prev.currentSession?.id === updatedSession.id
                       ? {
                           ...prev.currentSession,
-                          messages: prev.currentSession.messages.map((m) =>
+                          messages: prev.currentSession.messages.map((m: Message) =>
                             m.id === assistantMessage.id
                               ? { ...m, content: accumulatedContent }
                               : m
@@ -184,14 +176,13 @@ export function useChatState() {
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      // 更新助手消息为错误状态
       setChatState((prev) => ({
         ...prev,
         sessions: prev.sessions.map((s) =>
           s.id === updatedSession.id
             ? {
                 ...s,
-                messages: s.messages.map((m) =>
+                messages: s.messages.map((m: Message) =>
                   m.id === assistantMessage.id
                     ? { ...m, content: '抱歉，发生了错误，请稍后重试。' }
                     : m
@@ -199,46 +190,27 @@ export function useChatState() {
               }
             : s
         ),
-        currentSession:
-          prev.currentSession?.id === updatedSession.id
-            ? {
-                ...prev.currentSession,
-                messages: prev.currentSession.messages.map((m) =>
-                  m.id === assistantMessage.id
-                    ? { ...m, content: '抱歉，发生了错误，请稍后重试。' }
-                    : m
-                ),
-              }
-            : prev.currentSession,
       }));
     }
   };
 
-  // 更新消息反馈
   const updateMessageFeedback = (messageId: string, feedback: MessageFeedback) => {
     if (!chatState.currentSession) return;
-
-    const updatedSession: ChatSession = {
-      ...chatState.currentSession,
-      messages: chatState.currentSession.messages.map((msg) =>
-        msg.id === messageId
-          ? {
-              ...msg,
-              feedback: {
-                ...msg.feedback,
-                ...feedback,
-              },
-            }
-          : msg
-      ),
-    };
 
     setChatState((prev) => ({
       ...prev,
       sessions: prev.sessions.map((s) =>
-        s.id === updatedSession.id ? updatedSession : s
+        s.id === prev.currentSession?.id
+          ? {
+              ...s,
+              messages: s.messages.map((msg: Message) =>
+                msg.id === messageId
+                  ? { ...msg, feedback: { ...msg.feedback, ...feedback } }
+                  : msg
+              ),
+            }
+          : s
       ),
-      currentSession: updatedSession,
     }));
   };
 

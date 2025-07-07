@@ -1,3 +1,5 @@
+'use client';
+
 import { ChatSession } from '../../types/chat';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';

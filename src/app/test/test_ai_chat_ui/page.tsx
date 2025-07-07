@@ -5,9 +5,10 @@ import { Sidebar } from './components/layout/Sidebar';
 import { ChatArea } from './components/layout/ChatArea';
 import { useChatState } from './hooks/useChatState';
 import { useResponsive } from './hooks/useResponsive';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import './styles/animations.css';
 
 export default function ChatUI() {
@@ -21,9 +22,10 @@ export default function ChatUI() {
   } = useChatState();
 
   const { isMobile } = useResponsive();
+  const [mounted, setMounted] = useState(false);
 
-  // 在移动端自动折叠侧边栏
   useEffect(() => {
+    setMounted(true);
     if (isMobile && chatState.isSidebarExpanded) {
       toggleSidebar();
     }
@@ -33,13 +35,12 @@ export default function ChatUI() {
     <div className="flex h-screen bg-background">
       {/* 侧边栏 */}
       <div
-        className={`
-          fixed md:relative
-          z-20 md:z-auto
-          ${chatState.isSidebarExpanded ? 'animate-slide-in' : 'animate-slide-out'}
-          ${chatState.isSidebarExpanded ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-          h-screen
-        `}
+        className={cn(
+          'fixed md:relative z-20 md:z-auto h-screen',
+          mounted && chatState.isSidebarExpanded && 'animate-slide-in',
+          mounted && !chatState.isSidebarExpanded && 'animate-slide-out',
+          chatState.isSidebarExpanded ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        )}
       >
         <Sidebar
           sessions={chatState.sessions}
@@ -51,7 +52,7 @@ export default function ChatUI() {
       </div>
 
       {/* 遮罩层 */}
-      {isMobile && chatState.isSidebarExpanded && (
+      {mounted && isMobile && chatState.isSidebarExpanded && (
         <div
           className="fixed inset-0 bg-background/80 backdrop-blur-sm z-10 animate-fade-in"
           onClick={toggleSidebar}

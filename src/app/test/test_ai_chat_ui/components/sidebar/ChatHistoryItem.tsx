@@ -1,6 +1,8 @@
+'use client';
+
 import { ChatSession } from '../../types/chat';
 import { cn } from '@/lib/utils';
-import { formatDistanceToNow } from 'date-fns';
+import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 
 interface ChatHistoryItemProps {
@@ -10,8 +12,7 @@ interface ChatHistoryItemProps {
 }
 
 export function ChatHistoryItem({ session, isExpanded, onClick }: ChatHistoryItemProps) {
-  const formattedTime = formatDistanceToNow(new Date(session.lastMessageTime), {
-    addSuffix: true,
+  const formattedTime = format(new Date(session.lastMessageTime), 'yyyy-MM-dd HH:mm', {
     locale: zhCN,
   });
 
