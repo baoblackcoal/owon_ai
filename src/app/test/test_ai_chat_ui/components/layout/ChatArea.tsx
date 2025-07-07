@@ -23,14 +23,6 @@ export function ChatArea({ session, onSendMessage, onUpdateFeedback }: ChatAreaP
 
   return (
     <div className="flex flex-col h-full">
-      {/* 对话标题 */}
-      <div className="p-4 border-b flex-none">
-        <h2 className="text-lg font-medium">{session.title}</h2>
-        <p className="text-sm text-muted-foreground">
-          {new Date(session.lastMessageTime).toLocaleString()} · 可继续对话
-        </p>
-      </div>
-
       {/* 消息列表 - 使用flex-1使其填充剩余空间并可滚动 */}
       <div className="flex-1 overflow-hidden">
         <ScrollArea className="h-full p-4">

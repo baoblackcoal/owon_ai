@@ -30,6 +30,14 @@ export function Sidebar({
         isExpanded ? 'w-[280px]' : 'w-[60px]'
       )}
     >
+      {/* Logo */}
+      <div className="flex items-center space-x-4 p-2" id="ai_chat_logo">
+        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+          <span className="text-primary-foreground font-bold">O</span>
+        </div>
+        {isExpanded && <span className="text-lg font-bold">OWON AI 助手</span>}
+      </div>
+      
       {/* 折叠按钮 */}
       <div className="p-2">
         <Button
@@ -47,6 +55,8 @@ export function Sidebar({
           )}
         </Button>
       </div>
+
+      
 
       {/* 新建聊天按钮 */}
       <NewChatButton isExpanded={isExpanded} onClick={onNewChat} />

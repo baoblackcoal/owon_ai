@@ -6,21 +6,27 @@ import { useTheme } from '../../hooks/useTheme';
 interface HeaderProps {
   user?: User;
   children?: ReactNode;
+  title?: string;
+  lastMessageTime?: string;
 }
 
-export function Header({ user, children }: HeaderProps) {
+export function Header({ user, children, title, lastMessageTime }: HeaderProps) {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="h-[60px] border-b bg-card flex items-center justify-between px-4">
-      <div className="flex items-center">
+    <header className="h-[60px] border-b bg-card flex items-center justify-between px-4" id="ai_chat_header">
+      <div className="flex items-center space-x-4">
         {children}
-        <div className="flex items-center space-x-4">
-          <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-bold">O</span>
+        {title && (
+          <div id="ai_chat_title">
+            <h2 className="text-lg font-medium">{title}</h2>
+            {lastMessageTime && (
+              <p className="text-sm text-muted-foreground">
+                {new Date(lastMessageTime).toLocaleString()} · 可继续对话
+              </p>
+            )}
           </div>
-          <span className="text-lg font-bold">OWON AI 助手</span>
-        </div>
+        )}
       </div>
 
       <div className="flex items-center space-x-2">

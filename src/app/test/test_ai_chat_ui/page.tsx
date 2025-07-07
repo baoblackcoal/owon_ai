@@ -41,6 +41,7 @@ export default function ChatUI() {
           mounted && !chatState.isSidebarExpanded && 'animate-slide-out',
           chatState.isSidebarExpanded ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         )}
+        id="ai_chat_sidebar"
       >
         <Sidebar
           sessions={chatState.sessions}
@@ -61,7 +62,11 @@ export default function ChatUI() {
 
       {/* 主内容区域 */}
       <div className="flex-1 flex flex-col min-h-screen relative">
-        <Header user={chatState.user}>
+        <Header 
+          user={chatState.user}
+          title={chatState.currentSession?.title}
+          lastMessageTime={chatState.currentSession?.lastMessageTime}
+        >
           {isMobile && (
             <Button
               variant="ghost"
