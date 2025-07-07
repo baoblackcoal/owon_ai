@@ -1,5 +1,6 @@
 const axios = require('axios');
 const path = require('path');
+const { Transform } = require('stream');
 
 // 从 src/.env.development.local 获取配置
 require('dotenv').config({ path: path.resolve(__dirname, '../.env.development.local') });
@@ -8,13 +9,12 @@ const apiKey = process.env.DASHSCOPE_API_KEY;
 const appId = process.env.DASHSCOPE_APP_ID;
 
 if (!apiKey || !appId) {
-    console.error('请确保已在 src/.env.development.local 中设置环境变量 DASHSCOPE_API_KEY 和 DASHSCOPE_APPP_ID');
+    console.error('请确保已在 src/.env.development.local 中设置环境变量 DASHSCOPE_API_KEY 和 DASHSCOPE_APP_ID');
     process.exit(1);
 }
 
 const pipeline_ids1 = 'he9rcpebc3'
 const pipeline_ids2 = 'utmhvnxgey'
-
 
 async function callDashScope() {
     const url = `https://dashscope.aliyuncs.com/api/v1/apps/${appId}/completion`;
@@ -24,61 +24,97 @@ async function callDashScope() {
             prompt: "ADS800A的带宽是多少？"
         },
         parameters: {
-            'incremental_output' : 'true',
-            'has_thoughts':'true',//工作流应用和智能体编排应用实现流式输出需要设置此参数
-            rag_options:{
-                pipeline_ids:[pipeline_ids1,pipeline_ids2]  // 替换为指定的知识库ID，多个请用逗号隔开
+            'incremental_output': 'true',
+            'has_thoughts': 'true',
+            rag_options: {
+                pipeline_ids: [pipeline_ids1, pipeline_ids2]
             }
         },
         debug: {}
     };
 
     try {
+        console.log("正在发送请求到 DashScope API...");
+
         const response = await axios.post(url, data, {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json',
                 'X-DashScope-SSE': 'enable'
             },
-            responseType: 'stream' // 用于处理流式响应
-
+            responseType: 'stream'
         });
 
         if (response.status === 200) {
-            console.log("Request successful:");
+            // 处理流式响应 SSE协议解析转换流
+            const sseTransformer = new Transform({
+                transform(chunk, encoding, callback) {
+                    this.buffer += chunk.toString();
+                    
+                    // 按SSE事件分割（两个换行符）
+                    const events = this.buffer.split(/\n\n/);
+                    this.buffer = events.pop() || ''; // 保留未完成部分
+                    
+                    events.forEach(eventData => {
+                        const lines = eventData.split('\n');
+                        let textContent = '';
+                        
+                        // 解析事件内容
+                        lines.forEach(line => {
+                            if (line.startsWith('data:')) {
+                                try {
+                                    const jsonData = JSON.parse(line.slice(5).trim());
+                                    if (jsonData.output?.text) {
+                                        textContent = jsonData.output.text;
+                                    }
+                                } catch(e) {
+                                    console.error('JSON解析错误:', e.message);
+                                }
+                            }
+                        });
 
-            // 处理流式响应
-            response.data.on('data', (chunk) => {
-                console.log(`Received chunk: ${chunk.toString()}`);
+                        if (textContent) {
+                            // 添加换行符并推送
+                            this.push(textContent + '\n');
+                        }
+                    });
+                    
+                    callback();
+                },
+                flush(callback) {
+                    if (this.buffer) {
+                        this.push(this.buffer + '\n');
+                    }
+                    callback();
+                }
             });
+            sseTransformer.buffer = '';
 
-            response.data.on('end', () => {
-                console.log("Stream ended.");
-            });
+            // 管道处理
+            response.data
+                .pipe(sseTransformer)
+                .on('data', (textWithNewline) => {
+                    process.stdout.write(textWithNewline); // 自动换行输出
+                })
+                .on('end', () => console.log("\n--- 回答完成 ---"))
+                .on('error', err => console.error("管道错误:", err));
 
-            response.data.on('error', (error) => {
-                console.error(`Stream error: ${error.message}`);
-            });
         } else {
-            console.log("Request failed:");
+            console.log("请求失败，状态码:", response.status);
             if (response.data.request_id) {
                 console.log(`request_id=${response.data.request_id}`);
             }
-            console.log(`code=${response.status}`);
             if (response.data.message) {
                 console.log(`message=${response.data.message}`);
-            } else {
-                console.log('message=Unknown error');
             }
         }
     } catch (error) {
-        console.error(`Error calling DashScope: ${error.message}`);
+        console.error(`API调用失败: ${error.message}`);
         if (error.response) {
-            console.error(`Response status: ${error.response.status}`);
-            console.error(`Response data: ${JSON.stringify(error.response.data, null, 2)}`);
+            console.error(`状态码: ${error.response.status}`);
+            console.error(`响应数据: ${JSON.stringify(error.response.data, null, 2)}`);
         }
     }
-
 }
 
 callDashScope();
