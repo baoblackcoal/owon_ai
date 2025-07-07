@@ -29,7 +29,7 @@
 - 使用 Tailwind CSS 进行样式开发
 
 # 测试
-- 使用 Playwright 进行 E2E 测试
+- 使用 Playwright MCP 测试页面（不需要写测试代码）
 - 使用 Supabase MCP 工具测试数据库
 
 # 注意

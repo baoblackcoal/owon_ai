@@ -21,6 +21,12 @@ const tests: TestConfig[] = [
         description: '运行 TypeScript 版本的 API 测试',
         command: 'npx',
         args: ['ts-node', '--project', path.join(__dirname, 'tsconfig.json'), path.join(__dirname, 'test_aliyun_api.ts')]
+    },
+    {
+        name: 'chat',
+        description: '运行多轮对话测试',
+        command: 'npx',
+        args: ['ts-node', '--project', path.join(__dirname, 'tsconfig.json'), path.join(__dirname, 'test_aliyun_api_multi_chat.ts')]
     }
 ];
 
@@ -30,11 +36,12 @@ function showHelp(): void {
     console.log('  npx ts-node run_test.ts [选项]');
     console.log('\n选项：');
     console.log('  --help, -h     显示帮助信息');
-    console.log('  --test, -t     指定要运行的测试 (js 或 ts)');
+    console.log('  --test, -t     指定要运行的测试 (js, ts 或 chat)');
     console.log('  --prompt, -p   指定要测试的问题 (默认: "ADS800A的带宽是多少？")');
     console.log('\n示例：');
     console.log('  npx ts-node run_test.ts -t js');
     console.log('  npx ts-node run_test.ts -t ts');
+    console.log('  npx ts-node run_test.ts -t chat');
     console.log('  npx ts-node run_test.ts -t js -p "示波器的采样率是多少？"');
     console.log('\n可用的测试：');
     tests.forEach(test => {

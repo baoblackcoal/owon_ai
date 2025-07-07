@@ -1,2 +1,2 @@
 - 请解析 TODO 的实现。 包含架构，目录文件，类，接口，方法，使用框架图，流程图，将解析文档编写到 doc/todo/README_TODO.md中。
-- 修改 @page.tsx 能够进行多轮对话，请先规划TODO，然后实施，最后使用playwright MCP测试（不需要写代码）。
+- 修改 @page.tsx 能够进行多轮对话。请先规划TODO，然后实施，最后使用playwright MCP测试（不需要写测试代码）。
