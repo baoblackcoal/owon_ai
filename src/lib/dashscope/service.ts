@@ -136,6 +136,7 @@ export class DashScopeService {
                     .on('end', () => {
                         const totalTime = Date.now() - startTime;
                         console.log(`[DashScope] 响应完成 - 总耗时: ${totalTime}ms`);
+                        console.log(`[DashScope] 调用 onComplete 回调`);
                         options.onComplete?.();
                     })
                     .on('error', (err: Error) => {
@@ -145,6 +146,13 @@ export class DashScopeService {
                         };
                         console.error(`[DashScope] 流处理错误 - ${err.message}`);
                         options.onError?.(error);
+                    })
+                    .on('close', () => {
+                        console.log(`[DashScope] 流连接已关闭`);
+                    })
+                    .on('finish', () => {
+                        options.onComplete?.();
+                        console.log(`[DashScope] 流写入完成`);
                     });
 
             } else {

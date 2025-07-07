@@ -35,20 +35,50 @@ export async function POST(request: NextRequest) {
         const service = DashScopeService.getInstance({ apiKey, appId });
 
         // 处理流式响应
-        service.askQuestion(prompt, {
-            onStream: async (text) => {
-                await writer.write(encoder.encode(`data: ${JSON.stringify({ text })}\n\n`));
-            },
-            onError: async (error) => {
+        try {
+            await service.askQuestion(prompt, {
+                onStream: async (text) => {
+                    try {
+                        await writer.write(encoder.encode(`data: ${JSON.stringify({ text })}\n\n`));
+                    } catch (writeError) {
+                        console.error('写入流数据失败:', writeError);
+                    }
+                },
+                onError: async (error) => {
+                    try {
+                        await writer.write(
+                            encoder.encode(`data: ${JSON.stringify({ error: error.message })}\n\n`)
+                        );
+                    } catch (writeError) {
+                        console.error('写入错误信息失败:', writeError);
+                    }
+                    try {
+                        await writer.close();
+                    } catch (closeError) {
+                        console.error('关闭写入器失败:', closeError);
+                    }
+                },
+                onComplete: async () => {
+                    console.log('[API] onComplete 回调被调用');
+                    try {
+                        await writer.close();
+                        console.log('[API] 写入器已关闭');
+                    } catch (closeError) {
+                        console.error('关闭写入器失败:', closeError);
+                    }
+                }
+            });
+        } catch (serviceError) {
+            console.error('DashScope服务错误:', serviceError);
+            try {
                 await writer.write(
-                    encoder.encode(`data: ${JSON.stringify({ error: error.message })}\n\n`)
+                    encoder.encode(`data: ${JSON.stringify({ error: '服务调用失败' })}\n\n`)
                 );
                 await writer.close();
-            },
-            onComplete: async () => {
-                await writer.close();
+            } catch (writeError) {
+                console.error('写入错误信息失败:', writeError);
             }
-        });
+        }
 
         // 返回流式响应
         return new Response(stream.readable, {

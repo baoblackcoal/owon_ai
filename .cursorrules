@@ -31,3 +31,7 @@
 # 测试
 - 使用 Playwright 进行 E2E 测试
 - 使用 Supabase MCP 工具测试数据库
+
+# 注意
+- pnpm dev 需要开发人员手动启动，因为开发人员有可能已经启动过
+

@@ -34,11 +34,11 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <main className="container mx-auto px-4 py-6">
-            <header className="mb-8 text-center">
+          {children}
+            {/* <header className="mb-8 text-center">
               <h1 className="text-4xl font-bold mb-2">OWON Todo</h1>
               <p className="text-muted-foreground">管理你的每日任务</p>
-            </header>
-          {children}
+            </header> */}
           </main>
         </ThemeProvider>
       </body>
