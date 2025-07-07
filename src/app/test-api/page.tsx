@@ -4,75 +4,43 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
-// 定义消息类型
 interface Message {
-    id: string;
     role: 'user' | 'assistant';
     content: string;
-    timestamp: number;
 }
 
+const commonQuestions = [
+    'ADS800A带宽是多少？',
+    'ADS800A采样率是多少？',
+    '你好'
+];
+
 export default function TestApiPage() {
-    const [prompt, setPrompt] = useState('');
     const [messages, setMessages] = useState<Message[]>([]);
-    const [currentResponse, setCurrentResponse] = useState('');
+    const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
-    const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+    const chatWindowRef = useRef<HTMLDivElement>(null);
 
-    // 自动滚动到最新消息
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [messages, currentResponse]);
-
-    // 清理超时定时器
-    useEffect(() => {
-        return () => {
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current);
-            }
-        };
-    }, []);
-
-    const resetState = () => {
-        setIsLoading(false);
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
+    const scrollToBottom = () => {
+        if (chatWindowRef.current) {
+            chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
         }
     };
 
-    const generateId = () => `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
 
-    const clearConversation = () => {
-        setMessages([]);
-        setCurrentResponse('');
-        setError(null);
-    };
+    const handleSend = async (text: string) => {
+        if (!text.trim() || isLoading) return;
 
-    const handleSubmit = async () => {
-        if (!prompt.trim()) return;
-
-        const userMessage: Message = {
-            id: generateId(),
-            role: 'user',
-            content: prompt.trim(),
-            timestamp: Date.now()
-        };
-
-        // 添加用户消息到历史
-        setMessages(prev => [...prev, userMessage]);
-        setPrompt(''); // 清空输入框
         setIsLoading(true);
-        setError(null);
-        setCurrentResponse('');
+        setInput('');
 
-        // 设置30秒超时
-        timeoutRef.current = setTimeout(() => {
-            setError('请求超时，请重试');
-            resetState();
-        }, 30000);
+        // 添加用户消息
+        setMessages(prev => [...prev, { role: 'user', content: text }]);
 
         try {
             const response = await fetch('/api/dashscope', {
@@ -80,77 +48,61 @@ export default function TestApiPage() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ 
-                    prompt: userMessage.content,
-                    messages: messages // 发送消息历史
-                }),
+                body: JSON.stringify({ prompt: text }),
             });
 
-            if (!response.ok) {
-                throw new Error('API请求失败');
-            }
-
-            clearTimeout(timeoutRef.current); // 收到响应后清除超时
+            if (!response.ok) throw new Error('请求失败');
 
             const reader = response.body?.getReader();
-            if (!reader) {
-                throw new Error('无法读取响应流');
-            }
+            if (!reader) throw new Error('无法读取响应');
 
-            let assistantResponseContent = '';
+            // 添加AI消息占位
+            setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
 
-            // 处理流式响应
-            try {
-                console.log('开始处理流式响应');
-                while (true) {
-                    const { done, value } = await reader.read();
-                    console.log('读取流数据:', { done, valueLength: value?.length });
-                    if (done) {
-                        console.log('流已结束');
-                        break;
-                    }
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
 
-                    // 解码响应数据
-                    const text = new TextDecoder().decode(value);
-                    const lines = text.split('\n');
+                const text = new TextDecoder().decode(value);
+                const lines = text.split('\n');
 
-                    lines.forEach(line => {
-                        if (line.startsWith('data: ')) {
-                            try {
-                                const data = JSON.parse(line.slice(5));
-                                if (data.error) {
-                                    setError(data.error);
-                                } else if (data.text) {
-                                    assistantResponseContent += data.text;
-                                    setCurrentResponse(assistantResponseContent);
-                                }
-                            } catch (e) {
-                                console.error('解析响应数据失败:', e);
+                lines.forEach(line => {
+                    if (line.startsWith('data: ')) {
+                        try {
+                            const data = JSON.parse(line.slice(5));
+                            if (data.text) {
+                                setMessages(prev => {
+                                    const newMessages = [...prev];
+                                    const lastMessage = newMessages[newMessages.length - 1];
+                                    if (lastMessage.role === 'assistant') {
+                                        lastMessage.content += data.text;
+                                    }
+                                    return newMessages;
+                                });
                             }
+                            if (data.sessionId) {
+                                document.cookie = `dashscope_session_id=${data.sessionId}; path=/`;
+                            }
+                        } catch (e) {
+                            console.error('解析SSE数据失败:', e);
                         }
-                    });
-                }
-
-                // 流结束后，将完整的AI回复添加到消息历史
-                if (assistantResponseContent) {
-                    const assistantMessage: Message = {
-                        id: generateId(),
-                        role: 'assistant',
-                        content: assistantResponseContent,
-                        timestamp: Date.now()
-                    };
-                    setMessages(prev => [...prev, assistantMessage]);
-                    setCurrentResponse(''); // 清空当前响应显示
-                }
-            } catch (streamError) {
-                console.error('流式响应处理失败:', streamError);
-                setError('响应流处理失败');
+                    }
+                });
             }
-        } catch (err) {
-            setError(err instanceof Error ? err.message : '未知错误');
+        } catch (error) {
+            console.error('发送消息失败:', error);
+            setMessages(prev => [...prev, { 
+                role: 'assistant', 
+                content: '抱歉，发生了错误，请稍后重试。' 
+            }]);
         } finally {
-            resetState();
+            setIsLoading(false);
         }
+    };
+
+    const clearChat = () => {
+        setMessages([]);
+        document.cookie = 'dashscope_session_id=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
     };
 
     return (
@@ -159,86 +111,74 @@ export default function TestApiPage() {
                 <h1 className="text-2xl font-bold">DashScope API 多轮对话测试</h1>
                 <Button 
                     variant="outline" 
-                    onClick={clearConversation}
-                    disabled={isLoading}
+                    onClick={clearChat}
+                    className="text-gray-500"
                 >
                     清空对话
                 </Button>
             </div>
 
-            {error && (
-                <div className="text-red-500 mb-4 p-2 bg-red-50 rounded">
-                    错误: {error}
-                </div>
-            )}
-
-            {/* 对话历史显示区域 */}
-            <Card className="p-4 mb-4 h-[500px] overflow-y-auto">
-                <div className="space-y-4">
-                    {messages.length === 0 && !currentResponse && (
-                        <div className="text-gray-500 text-center py-8">
-                            开始你的第一轮对话吧！
-                        </div>
-                    )}
-                    
-                    {messages.map((message) => (
+            {/* 聊天窗口 */}
+            <Card className="mb-4 p-4">
+                <div 
+                    ref={chatWindowRef}
+                    className="h-[420px] overflow-y-auto space-y-4"
+                >
+                    {messages.map((message, index) => (
                         <div
-                            key={message.id}
+                            key={index}
                             className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                         >
                             <div
-                                className={`max-w-[80%] p-3 rounded-lg ${
+                                className={`max-w-[70%] p-3 rounded-lg ${
                                     message.role === 'user'
-                                        ? 'bg-blue-500 text-white ml-auto'
-                                        : 'bg-gray-100 text-gray-900'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'bg-gray-100 text-gray-800'
                                 }`}
                             >
-                                <div className="whitespace-pre-wrap">{message.content}</div>
-                                <div className={`text-xs mt-1 opacity-70`}>
-                                    {new Date(message.timestamp).toLocaleTimeString()}
-                                </div>
+                                {message.content || '...'}
                             </div>
                         </div>
                     ))}
-
-                    {/* 显示当前AI响应（实时流式） */}
-                    {currentResponse && (
-                        <div className="flex justify-start">
-                            <div className="max-w-[80%] p-3 rounded-lg bg-gray-100 text-gray-900">
-                                <div className="whitespace-pre-wrap">{currentResponse}</div>
-                                <div className="text-xs mt-1 opacity-70">
-                                    正在回复...
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    <div ref={messagesEndRef} />
                 </div>
             </Card>
 
             {/* 输入区域 */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 mb-4">
                 <Input
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleSend(input);
+                        }
+                    }}
                     placeholder="输入你的问题..."
-                    onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSubmit()}
                     disabled={isLoading}
                     className="flex-1"
                 />
                 <Button 
-                    onClick={handleSubmit}
-                    disabled={isLoading || !prompt.trim()}
+                    onClick={() => handleSend(input)}
+                    disabled={isLoading || !input.trim()}
                 >
-                    {isLoading ? '发送中...' : '发送'}
+                    发送
                 </Button>
             </div>
 
-            {/* 对话统计信息 */}
-            <div className="mt-2 text-sm text-gray-500 text-center">
-                当前对话包含 {messages.length} 条消息
+            {/* 常用问题 */}
+            <div className="flex gap-2 flex-wrap">
+                {commonQuestions.map((question, index) => (
+                    <Badge
+                        key={index}
+                        variant="secondary"
+                        className="cursor-pointer hover:bg-gray-200"
+                        onClick={() => handleSend(question)}
+                    >
+                        {question}
+                    </Badge>
+                ))}
             </div>
         </div>
     );
-} 
+}
