@@ -29,17 +29,16 @@
   
   <!-- 新建聊天按钮 (收缩状态) -->
   <rect x="10" y="115" width="40" height="40" rx="6" fill="#e74c3c"/>
-  <text x="30" y="139" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#ffffff">+</text>
+  <text x="30" y="140" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#ffffff">+</text>
   
   <!-- 历史对话列表 (收缩状态 - 仅显示圆点) -->
-  <circle cx="30" cy="180" r="4" fill="#ff6b35"/>
-  <circle cx="30" cy="200" r="4" fill="#95a5a6"/>
-  <circle cx="30" cy="220" r="4" fill="#95a5a6"/>
-  <circle cx="30" cy="240" r="4" fill="#95a5a6"/>
+  <circle cx="30" cy="195" r="4" fill="#ff6b35"/>
+  <circle cx="30" cy="265" r="4" fill="#95a5a6"/>
+  <circle cx="30" cy="335" r="4" fill="#95a5a6"/>
   
   <!-- 问答排行榜按钮 (收缩状态) -->
-  <rect x="10" y="720" width="40" height="40" rx="6" fill="#ff6b35"/>
-  <text x="30" y="743" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#ffffff">🏆</text>
+  <rect x="10" y="720" width="40" height="40" rx="6" fill="#ff6b35" stroke="#e74c3c"/>
+  <text x="30" y="745" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#ffffff">🏆</text>
   
   <!-- 右侧聊天区域 -->
   <rect x="80" y="80" width="1100" height="620" fill="#2c3e50" rx="8" stroke="#485563"/>
@@ -97,8 +96,8 @@
   <text x="120" y="753" font-family="Arial, sans-serif" font-size="14" fill="#95a5a6">继续在此对话中提问...</text>
   
   <!-- 发送按钮 -->
-  <rect x="1120" y="735" width="60" height="30" rx="15" fill="#e74c3c"/>
-  <text x="1150" y="753" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#ffffff">发送</text>
+  <rect x="1120" y="735" width="40" height="30" rx="15" fill="#e74c3c"/>
+  <text x="1140" y="753" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#ffffff">发送</text>
   
   <!-- 标注说明 -->
   <text x="20" y="30" font-family="Arial, sans-serif" font-size="12" fill="#bdc3c7">统一主界面 - 已登录用户视图（左侧导航栏收缩状态）</text>
