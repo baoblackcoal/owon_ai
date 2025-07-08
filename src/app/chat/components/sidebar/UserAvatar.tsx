@@ -33,7 +33,7 @@ export function UserAvatar({ user, size = 'md' }: UserAvatarProps) {
   const handleLogout = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push("/auth/login");
+    router.push("/chat");
   };
 
   return (
