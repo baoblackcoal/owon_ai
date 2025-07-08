@@ -2,15 +2,17 @@ import { User } from '../../types/chat';
 import { ReactNode } from 'react';
 import { ThemeToggle } from './ThemeToggle';
 import { useTheme } from '../../hooks/useTheme';
+import { HeaderAuth } from './HeaderAuth';
 
 interface HeaderProps {
   user?: User;
+  isAuthenticated?: boolean;
   children?: ReactNode;
   title?: string;
   lastMessageTime?: string;
 }
 
-export function Header({ user, children, title, lastMessageTime }: HeaderProps) {
+export function Header({ user, isAuthenticated = false, children, title, lastMessageTime }: HeaderProps) {
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -33,11 +35,9 @@ export function Header({ user, children, title, lastMessageTime }: HeaderProps) 
         {/* TODO: 主题切换 */}
         {/* <ThemeToggle theme={theme} onToggle={toggleTheme} /> */}
         
-        <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center cursor-pointer hover:bg-muted/80 transition-colors">
-          <span className="text-muted-foreground">
-            {user?.name?.[0] || '用户'}
-          </span>
-        </div>
+        {user && (
+          <HeaderAuth user={user} isAuthenticated={isAuthenticated} />
+        )}
       </div>
     </header>
   );

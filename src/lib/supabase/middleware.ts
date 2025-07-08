@@ -53,14 +53,18 @@ export async function updateSession(request: NextRequest) {
       return response;
     }
 
+    // Allow access to chat routes
+    if (request.nextUrl.pathname.startsWith('/chat/')) {
+      return response;
+    }
     
     // Allow access to test routes
     if (request.nextUrl.pathname.startsWith('/test/')) {
       return response;
     }
 
-    // Redirect unauthenticated users to login page
-    if (!user && request.nextUrl.pathname !== '/') {
+    // Redirect unauthenticated users to login page for protected routes
+    if (!user && request.nextUrl.pathname.startsWith('/protected/')) {
       const redirectUrl = new URL('/auth/login', request.url);
       redirectUrl.searchParams.set('redirectedFrom', request.nextUrl.pathname);
       return NextResponse.redirect(redirectUrl);

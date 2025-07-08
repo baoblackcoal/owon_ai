@@ -14,6 +14,7 @@ import './styles/animations.css';
 export default function ChatUI() {
   const {
     chatState,
+    isAuthenticated,
     toggleSidebar,
     selectSession,
     createNewSession,
@@ -64,6 +65,7 @@ export default function ChatUI() {
       <div className="flex-1 flex flex-col min-h-screen relative">
         <Header 
           user={chatState.user}
+          isAuthenticated={isAuthenticated}
           title={chatState.currentSession?.title}
           lastMessageTime={chatState.currentSession?.lastMessageTime}
         >

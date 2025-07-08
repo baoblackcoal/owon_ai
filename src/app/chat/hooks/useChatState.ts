@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChatSession, Message, User, MessageFeedback } from '../types/chat';
 import { v4 as uuidv4 } from 'uuid';
+import { useAuth } from './useAuth';
 
 const STORAGE_KEY = 'owon_ai_chat_state';
 
@@ -23,7 +24,33 @@ const initialState: ChatState = {
 };
 
 export function useChatState() {
+  const { user: supabaseUser, isAuthenticated } = useAuth();
   const [chatState, setChatState] = useState<ChatState>(initialState);
+
+  // 根据Supabase用户状态更新聊天状态中的用户信息
+  useEffect(() => {
+    if (supabaseUser) {
+      setChatState(prev => ({
+        ...prev,
+        user: {
+          id: supabaseUser.id,
+          name: supabaseUser.email?.split('@')[0] || '用户',
+          email: supabaseUser.email || '',
+          role: 'registered'
+        }
+      }));
+    } else {
+      setChatState(prev => ({
+        ...prev,
+        user: {
+          id: '1',
+          name: '游客',
+          email: 'guest@example.com',
+          role: 'guest'
+        }
+      }));
+    }
+  }, [supabaseUser, isAuthenticated]);
 
   // 从 localStorage 读取状态
   useEffect(() => {
@@ -216,6 +243,7 @@ export function useChatState() {
 
   return {
     chatState,
+    isAuthenticated,
     toggleSidebar,
     selectSession,
     createNewSession,
