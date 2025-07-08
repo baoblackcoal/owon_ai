@@ -1,15 +1,15 @@
 
 {
-    "mcpServers": {    
-      "playwright": {
-          "command": "cmd",
-          "args": [
-            "/c",
-            "npx",
-            "@playwright/mcp@latest"
-          ]
-        }
-     
-    }
+  "mcpServers": {    
+    "playwright": {
+        "command": "cmd",
+        "args": [
+          "/c",
+          "npx",
+          "@playwright/mcp@latest"
+        ]
+      }
+    
   }
+}
   
