@@ -62,6 +62,12 @@ export function InputArea({ onSend, disabled }: InputAreaProps) {
 
   return (
     <div className="p-4" id="ai_chat_input_area">
+      <style jsx global>{`
+        *:focus {
+          outline: none !important;
+          box-shadow: none !important;
+        }
+      `}</style>
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-row space-x-4 mb-4" id="ai_chat_input_common">
           <Popover open={open} onOpenChange={setOpen}>
@@ -70,7 +76,7 @@ export function InputArea({ onSend, disabled }: InputAreaProps) {
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="w-[200px] justify-between"
+                className="w-[200px] justify-between border border-input bg-background hover:bg-accent hover:text-accent-foreground focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-0 focus:outline-none"
               >
                 {selectedInstrument
                   ? instruments.find((instrument) => instrument.value === selectedInstrument)?.label
@@ -78,7 +84,7 @@ export function InputArea({ onSend, disabled }: InputAreaProps) {
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="w-[200px] p-0 border-none shadow-md">
               <Command>
                 <CommandInput placeholder="搜索仪器系列..." />
                 <CommandEmpty>未找到相关仪器</CommandEmpty>
