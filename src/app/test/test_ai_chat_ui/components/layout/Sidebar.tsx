@@ -31,7 +31,10 @@ export function Sidebar({
       )}
     >
       {/* Logo */}
-      <div className="flex items-center space-x-4 p-2" id="ai_chat_logo">
+      <div className={cn(
+        'flex items-center p-2',
+        isExpanded ? 'space-x-4' : 'justify-center'
+      )} id="ai_chat_logo">
         <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
           <span className="text-primary-foreground font-bold">O</span>
         </div>
