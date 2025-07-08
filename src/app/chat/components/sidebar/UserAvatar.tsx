@@ -10,6 +10,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Settings, LogOut } from 'lucide-react';
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 interface UserAvatarProps {
   user: User;
@@ -17,6 +19,7 @@ interface UserAvatarProps {
 }
 
 export function UserAvatar({ user, size = 'md' }: UserAvatarProps) {
+  const router = useRouter();
   const sizeClasses = {
     sm: 'w-8 h-8 text-sm',
     md: 'w-10 h-10 text-base',
@@ -25,6 +28,12 @@ export function UserAvatar({ user, size = 'md' }: UserAvatarProps) {
 
   const getUserInitial = (name: string) => {
     return name.charAt(0).toUpperCase();
+  };
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/auth/login");
   };
 
   return (
@@ -61,7 +70,7 @@ export function UserAvatar({ user, size = 'md' }: UserAvatarProps) {
           <Settings className="mr-2 h-4 w-4" />
           <span>设置</span>
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>退出登录</span>
         </DropdownMenuItem>
