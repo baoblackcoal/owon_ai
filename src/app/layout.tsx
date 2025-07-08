@@ -33,8 +33,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="container mx-auto">
-          {children}
+          <main >
+            <div className="w-full" id="main-content">
+              {children}
+            </div>
             {/* <header className="mb-8 text-center">
               <h1 className="text-4xl font-bold mb-2">OWON Todo</h1>
               <p className="text-muted-foreground">管理你的每日任务</p>

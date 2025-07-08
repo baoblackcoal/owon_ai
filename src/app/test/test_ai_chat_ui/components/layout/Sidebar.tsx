@@ -27,7 +27,7 @@ export function Sidebar({
     <div
       className={cn(
         'bg-card border-r transition-all duration-300 flex flex-col h-screen',
-        isExpanded ? 'w-[280px]' : 'w-[60px]'
+        isExpanded ? 'w-[280px]' : 'w-[70px]'
       )}
     >
       {/* Logo */}

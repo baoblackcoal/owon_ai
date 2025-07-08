@@ -23,7 +23,8 @@ export function MessageBubble({ message, onFeedback }: MessageBubbleProps) {
       <Card
         className={cn(
           'max-w-[85%] overflow-hidden',
-          isUser ? 'bg-muted' : 'bg-background'
+          isUser ? 'bg-muted pt-2 pb-2' : 'bg-background',
+          !isUser && 'border-0 shadow-none'
         )}
       >
         <div className="p-4">
@@ -31,7 +32,7 @@ export function MessageBubble({ message, onFeedback }: MessageBubbleProps) {
             <ReactMarkdown>{message.content}</ReactMarkdown>
           </div>
           {!isUser && (
-            <div className="flex items-center space-x-2 mt-4 border-t pt-4">
+            <div className="flex items-center space-x-2 mt-4">
               <Button
                 variant="ghost"
                 size="sm"
@@ -42,7 +43,6 @@ export function MessageBubble({ message, onFeedback }: MessageBubbleProps) {
                 onClick={() => onFeedback(message.id, { liked: !message.feedback?.liked })}
               >
                 <ThumbsUp className="h-4 w-4 mr-1" />
-                有帮助
               </Button>
               <Button
                 variant="ghost"
@@ -54,7 +54,6 @@ export function MessageBubble({ message, onFeedback }: MessageBubbleProps) {
                 onClick={() => onFeedback(message.id, { disliked: !message.feedback?.disliked })}
               >
                 <ThumbsDown className="h-4 w-4 mr-1" />
-                需改进
               </Button>
             </div>
           )}
