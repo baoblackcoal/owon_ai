@@ -3,6 +3,8 @@ import { ReactNode } from 'react';
 import { ThemeToggle } from './ThemeToggle';
 import { useTheme } from '../../hooks/useTheme';
 import { HeaderAuth } from './HeaderAuth';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 interface HeaderProps {
   user?: User;
@@ -32,6 +34,11 @@ export function Header({ user, isAuthenticated = false, children, title, lastMes
       </div>
 
       <div className="flex items-center space-x-2">
+        
+        {/* <Button variant="ghost" asChild>
+          <Link href="/about">关于</Link>
+        </Button> */}
+
         {/* TODO: 主题切换 */}
         {/* <ThemeToggle theme={theme} onToggle={toggleTheme} /> */}
         
