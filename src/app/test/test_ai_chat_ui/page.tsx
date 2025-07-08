@@ -81,9 +81,8 @@ export default function ChatUI() {
         <ChatArea
           session={chatState.currentSession}
           onSendMessage={sendMessage}
-          onUpdateFeedback={(messageId, liked) =>
-            updateMessageFeedback(messageId, { liked, disliked: !liked })
-          }
+          onUpdateFeedback={updateMessageFeedback}
+          onNewChat={createNewSession}
         />
       </div>
     </div>
