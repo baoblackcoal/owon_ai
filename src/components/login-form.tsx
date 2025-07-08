@@ -53,7 +53,7 @@ export function LoginForm({
 
       if (data?.user) {
         console.log('Login successful, redirecting...');
-      router.push("/protected");
+        router.push("/chat");
       } else {
         console.error('No user data returned');
         throw new Error('No user data returned');
