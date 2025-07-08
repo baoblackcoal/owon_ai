@@ -26,7 +26,7 @@ export function ChatArea({ session, onSendMessage, onUpdateFeedback }: ChatAreaP
       {/* 消息列表 - 使用flex-1使其填充剩余空间并可滚动 */}
       <div className="flex-1 overflow-hidden">
         <ScrollArea className="h-full p-4">
-          <div className="max-w-5xl mx-auto space-y-4">
+          <div className="max-w-5xl mx-auto space-y-4" id="ai_chat_message_list">
             {session.messages.map((message: Message) => (
               <MessageBubble
                 key={message.id}

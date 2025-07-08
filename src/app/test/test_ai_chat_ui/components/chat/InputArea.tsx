@@ -35,28 +35,30 @@ export function InputArea({ onSend, disabled }: InputAreaProps) {
   };
 
   return (
-    <div className="p-4 border-t">
-      <div className="relative">
-        <Textarea
-          ref={textareaRef}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="继续在此对话中提问..."
-          className="pr-12 resize-none min-h-[60px] max-h-[200px]"
-          disabled={disabled}
-        />
-        <Button
-          size="icon"
-          className="absolute right-2 bottom-2"
-          onClick={handleSend}
-          disabled={!input.trim() || disabled}
-        >
-          <Send className="h-4 w-4" />
-        </Button>
-      </div>
-      <div className="text-xs text-muted-foreground mt-2 text-center" id="ai_chat_ui_input_area_tip">
-        AI回答未必准确，请核查
+    <div className="p-4" id="ai_chat_input_area">
+      <div className="max-w-5xl mx-auto">
+        <div className="relative">
+          <Textarea
+            ref={textareaRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="继续在此对话中提问..."
+            className="pr-12 resize-none min-h-[100px] max-h-[200px]"
+            disabled={disabled}
+          />
+          <Button
+            size="icon"
+            className="absolute right-2 bottom-2"
+            onClick={handleSend}
+            disabled={!input.trim() || disabled}
+          >
+            <Send className="h-4 w-4" />
+          </Button>
+        </div>
+        <div className="text-xs text-muted-foreground mt-2 text-center" id="ai_chat_ui_input_area_tip">
+          AI回答未必准确，请核查
+        </div>
       </div>
     </div>
   );
