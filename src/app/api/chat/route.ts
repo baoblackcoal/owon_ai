@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { prompt } = body;
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const sessionId = cookieStore.get('dashscope_session_id')?.value;
 
     const response = await dashscope.sendMessage(prompt, sessionId);
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
             }
             if (jsonData.output?.session_id) {
               // Set session cookie
-              cookies().set('dashscope_session_id', jsonData.output.session_id, {
+              cookieStore.set('dashscope_session_id', jsonData.output.session_id, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'strict',
