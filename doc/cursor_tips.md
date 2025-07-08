@@ -9,6 +9,7 @@
     - 实现测试简单的svg页面，确认后结合测试脚本做出测试页面,如test_ai_page.ts
     - 使用虚拟数据做出页面，test_ai_chat_ui
     - 根据测试页面，和虚拟数据的页面做出符合项目的页面功能
+- md文件不能使用tab功能，需要用源码的文件才可以，md扩展名可先改成ts扩展名
 
 # 插件
 - Markdown Preview Enhanced预览 https://blog.csdn.net/weixin_41192489/article/details/142565467
