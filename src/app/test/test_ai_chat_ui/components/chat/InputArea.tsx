@@ -2,6 +2,30 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Send } from 'lucide-react';
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+const instruments = [
+  { label: "示波器", value: "oscilloscope" },
+  { label: "ADS800A", value: "ads800a" },
+  { label: "ADS900A", value: "ads900a" },
+  { label: "ADS3000", value: "ads3000" },
+  { label: "ADS3000A", value: "ads3000a" },
+  { label: "ADS4000", value: "ads4000" },
+  { label: "ADS4000A", value: "ads4000a" },
+];
 
 interface InputAreaProps {
   onSend: (content: string) => void;
@@ -10,6 +34,8 @@ interface InputAreaProps {
 
 export function InputArea({ onSend, disabled }: InputAreaProps) {
   const [input, setInput] = useState('');
+  const [open, setOpen] = useState(false);
+  const [selectedInstrument, setSelectedInstrument] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // 自动调整文本框高度
@@ -37,6 +63,49 @@ export function InputArea({ onSend, disabled }: InputAreaProps) {
   return (
     <div className="p-4" id="ai_chat_input_area">
       <div className="max-w-5xl mx-auto">
+        <div className="flex flex-row space-x-4 mb-4" id="ai_chat_input_common">
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={open}
+                className="w-[200px] justify-between"
+              >
+                {selectedInstrument
+                  ? instruments.find((instrument) => instrument.value === selectedInstrument)?.label
+                  : "选择仪器系列..."}
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[200px] p-0">
+              <Command>
+                <CommandInput placeholder="搜索仪器系列..." />
+                <CommandEmpty>未找到相关仪器</CommandEmpty>
+                <CommandGroup>
+                  {instruments.map((instrument) => (
+                    <CommandItem
+                      key={instrument.value}
+                      value={instrument.value}
+                      onSelect={(currentValue) => {
+                        setSelectedInstrument(currentValue === selectedInstrument ? "" : currentValue);
+                        setOpen(false);
+                      }}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          selectedInstrument === instrument.value ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                      {instrument.label}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
         <div className="relative">
           <Textarea
             ref={textareaRef}
