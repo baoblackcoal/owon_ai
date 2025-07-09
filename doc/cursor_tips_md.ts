@@ -11,7 +11,8 @@
     - 根据测试页面，和虚拟数据的页面做出符合项目的页面功能
 - md文件不能使用tab功能，需要用源码的文件才可以，md扩展名可先改成ts扩展名
 - 可同时使用两个或多个项目文件夹，打开多个cursor窗口，分别做不相干的功能，并行使用cursor。
-- .env相关文件Cursor不能读取，需要提示Cursor使用Get-Content读取
+- .env相关文件Cursor不能读取，需要提示Cursor：使用Get-Content读取env相关文件
+- 对于复杂的问题可以使用ASK模式加Gemini 2.5PRO或GPT O3最好的模型分析方案，再使用Claude执行
 
 # 插件
 - Markdown Preview Enhanced预览 https://blog.csdn.net/weixin_41192489/article/details/142565467
