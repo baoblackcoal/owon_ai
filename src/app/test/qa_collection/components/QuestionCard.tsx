@@ -19,35 +19,35 @@ export function QuestionCard({ question }: QuestionCardProps) {
   };
 
   return (
-    <Card className="p-6 hover:shadow-md transition-shadow cursor-pointer">
-      {/* 标题和内容预览 */}
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold mb-2 line-clamp-2 hover:text-primary">
+    <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer">
+      {/* 标题和内容预览 - 紧凑化 */}
+      <div className="mb-3">
+        <h3 className="text-base font-semibold mb-1 line-clamp-2 hover:text-primary">
           {question.title}
         </h3>
-        <p className="text-muted-foreground text-sm line-clamp-2">
+        <p className="text-muted-foreground text-xs line-clamp-2">
           {question.content}
         </p>
       </div>
 
-      {/* 标签区域 */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        <Badge variant="outline" className="text-xs">
+      {/* 标签区域 - 紧凑化 */}
+      <div className="flex flex-wrap gap-1 mb-3">
+        <Badge variant="outline" className="text-xs px-2 py-0.5">
           {getCategoryName(question.category_id)}
         </Badge>
-        <Badge variant="secondary" className="text-xs">
+        <Badge variant="secondary" className="text-xs px-2 py-0.5">
           {getModelName(question.product_model_id)}
         </Badge>
         {question.tags.map((tag) => (
-          <Badge key={tag.id} variant="default" className="text-xs">
+          <Badge key={tag.id} variant="default" className="text-xs px-2 py-0.5">
             {tag.name}
           </Badge>
         ))}
       </div>
 
-      {/* 统计信息和时间 */}
-      <div className="flex items-center justify-between text-sm text-muted-foreground">
-        <div className="flex items-center gap-4">
+      {/* 统计信息和时间 - 紧凑化 */}
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <div className="flex items-center gap-3">
           <span className="flex items-center gap-1">
             <span>👁️</span>
             <span>{question.views_count}</span>
