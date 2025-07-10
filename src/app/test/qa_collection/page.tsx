@@ -68,16 +68,6 @@ export default function QACollectionPage() {
     );
   };
 
-  // 移除单个标签
-  const removeTag = (tagId: number) => {
-    setSelectedTags(prev => prev.filter(id => id !== tagId));
-  };
-
-  // 获取选中标签的名称列表
-  const selectedTagNames = selectedTags
-    .map(tagId => tags.find(tag => tag.id === tagId)?.name)
-    .filter(Boolean) as string[];
-
   // 搜索和过滤逻辑
   const filteredQuestions = useMemo(() => {
     let result = questions;
@@ -328,37 +318,19 @@ export default function QACollectionPage() {
                 </Tabs>
                 {(searchTerm || selectedCategory || selectedModel || selectedTags.length > 0) && (
                   <Button 
+                    id="clear-all-filters"
                     variant="ghost" 
                     size="sm"
                     onClick={clearAllFilters}
                     className="h-8 px-2 text-xs text-muted-foreground hover:text-foreground"
                   >
-                    <X className="h-3 w-3" />
+                    重置
+                    <X className="ml-1 h-3 w-3" />
                   </Button>
                 )}
               </div>
             </div>
           </div>
-
-          {/* 选中的标签显示 - 紧凑化 */}
-          {selectedTags.length > 0 && (
-            <div className="space-y-1 pt-2 border-t">
-              <div className="flex flex-wrap gap-1">
-                {selectedTags.map((tagId) => {
-                  const tag = tags.find(t => t.id === tagId);
-                  return tag ? (
-                    <Badge key={tagId} variant="secondary" className="px-2 py-0.5 text-xs">
-                      {tag.name}
-                      <X 
-                        className="ml-1 h-3 w-3 cursor-pointer hover:text-destructive" 
-                        onClick={() => removeTag(tagId)}
-                      />
-                    </Badge>
-                  ) : null;
-                })}
-              </div>
-            </div>
-          )}
 
           {/* 时间范围选择器整合到过滤器内 */}
           {sortBy === 'ranking' && (
@@ -402,7 +374,7 @@ export default function QACollectionPage() {
               </div>
               <h3 className="text-lg font-semibold mb-2">没有找到匹配的问题</h3>
               <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
-                尝试调整搜索关键词或筛选条件，或者浏览其他分类的问答内容
+                尝试调整搜索关键词或筛选条件，或者重置所有筛选项查看更多内容
               </p>
               <div className="flex gap-3 justify-center">
                 {(searchTerm || selectedCategory || selectedModel || selectedTags.length > 0) && (
@@ -412,8 +384,8 @@ export default function QACollectionPage() {
                     onClick={clearAllFilters}
                     className="px-4"
                   >
-                    <X className="mr-2 h-4 w-4" />
-                    清除所有筛选
+                    重置筛选
+                    <X className="ml-2 h-4 w-4" />
                   </Button>
                 )}
                 <Button variant="default" size="sm" onClick={() => setSearchTerm('')}>
