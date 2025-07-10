@@ -2,6 +2,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Question } from '../types';
 import { getCategoryName, getModelName } from '../mockData';
+import { Eye, ThumbsUp, MessageCircle } from 'lucide-react';
 
 interface QuestionCardProps {
   question: Question;
@@ -19,45 +20,49 @@ export function QuestionCard({ question }: QuestionCardProps) {
   };
 
   return (
-    <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer">
-      {/* 标题和内容预览 - 紧凑化 */}
+    <Card className="p-4 gap-2 hover:shadow-md transition-shadow cursor-pointer">
+      {/* 标题和内容预览 */}
       <div className="mb-3">
-        <h3 className="text-base font-semibold mb-1 line-clamp-2 hover:text-primary">
+        <h3 className="text-base font-semibold mb-2 line-clamp-2 hover:text-primary">
           {question.title}
         </h3>
-        <p className="text-muted-foreground text-xs line-clamp-2">
+        <p className="text-sm text-foreground/80 line-clamp-2">
           {question.content}
         </p>
       </div>
 
-      {/* 标签区域 - 紧凑化 */}
-      <div className="flex flex-wrap gap-1 mb-3">
-        <Badge variant="outline" className="text-xs px-2 py-0.5">
+      {/* 标签区域 - 更柔和的样式 */}
+      <div className="flex flex-wrap gap-1.5 mb-3">
+        <Badge variant="secondary" className="text-[10px] px-1.5 py-0 bg-secondary/50 text-secondary-foreground/70">
           {getCategoryName(question.category_id)}
         </Badge>
-        <Badge variant="secondary" className="text-xs px-2 py-0.5">
+        <Badge variant="secondary" className="text-[10px] px-1.5 py-0 bg-secondary/50 text-secondary-foreground/70">
           {getModelName(question.product_model_id)}
         </Badge>
         {question.tags.map((tag) => (
-          <Badge key={tag.id} variant="default" className="text-xs px-2 py-0.5">
+          <Badge 
+            key={tag.id} 
+            variant="secondary" 
+            className="text-[10px] px-1.5 py-0 bg-secondary/50 text-secondary-foreground/70"
+          >
             {tag.name}
           </Badge>
         ))}
       </div>
 
-      {/* 统计信息和时间 - 紧凑化 */}
+      {/* 统计信息和时间 */}
       <div className="flex items-center justify-between text-xs text-muted-foreground">
         <div className="flex items-center gap-3">
           <span className="flex items-center gap-1">
-            <span>👁️</span>
+            <Eye className="w-3.5 h-3.5" />
             <span>{question.views_count}</span>
           </span>
           <span className="flex items-center gap-1">
-            <span>👍</span>
+            <ThumbsUp className="w-3.5 h-3.5" />
             <span>{question.likes_count}</span>
           </span>
           <span className="flex items-center gap-1">
-            <span>💬</span>
+            <MessageCircle className="w-3.5 h-3.5" />
             <span>{question.replies_count}</span>
           </span>
         </div>

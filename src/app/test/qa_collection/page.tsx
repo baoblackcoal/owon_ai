@@ -177,7 +177,7 @@ export default function QACollectionPage() {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-7xl">
+    <div className="container mx-auto px-8 py-4 max-w-7xl">
       {/* 页面标题区域 - 紧凑化 */}
       <div className="mb-4">
         <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
@@ -316,7 +316,7 @@ export default function QACollectionPage() {
               <label className="text-xs font-medium text-foreground">排序</label>
               <div className="flex gap-1">
                 <Tabs value={sortBy} onValueChange={(value) => setSortBy(value as QAFilters['sortBy'])} className="flex-1">
-                  <TabsList className="grid grid-cols-3 h-8 text-xs">
+                  <TabsList className="grid grid-cols-3 h-8 text-xs w-300">
                     <TabsTrigger value="latest" className="text-xs px-2">最新</TabsTrigger>
                     <TabsTrigger value="best" className="text-xs px-2">最佳</TabsTrigger>
                     <TabsTrigger value="ranking" className="text-xs px-2">排行</TabsTrigger>
