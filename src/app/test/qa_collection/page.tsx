@@ -268,7 +268,7 @@ export default function QACollectionPage() {
               </DropdownMenu>
             </div>
 
-            {/* 标签过滤 - 紧凑化 */}
+            {/* 标签过滤 - 单选模式 */}
             <div className="space-y-1">
               <label className="text-xs font-medium text-foreground">标签</label>
               <Popover open={tagSearchOpen} onOpenChange={setTagSearchOpen}>
@@ -281,7 +281,7 @@ export default function QACollectionPage() {
                   >
                     {selectedTags.length === 0 
                       ? '选择标签' 
-                      : `已选 ${selectedTags.length} 个`
+                      : tags.find(tag => tag.id === selectedTags[0])?.name || '选择标签'
                     }
                     <ChevronDown className="ml-2 h-3 w-3" />
                   </Button>
@@ -295,11 +295,15 @@ export default function QACollectionPage() {
                         <CommandItem
                           key={tag.id}
                           value={tag.name}
-                          onSelect={() => handleTagToggle(tag.id)}
+                          onSelect={() => {
+                            // 单选模式：直接设置为当前选中的标签
+                            setSelectedTags([tag.id]);
+                            setTagSearchOpen(false);
+                          }}
                         >
                           <Check
                             className={`mr-2 h-4 w-4 ${
-                              selectedTags.includes(tag.id) ? "opacity-100" : "opacity-0"
+                              selectedTags[0] === tag.id ? "opacity-100" : "opacity-0"
                             }`}
                           />
                           {tag.name}
