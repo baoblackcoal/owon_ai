@@ -26,6 +26,7 @@ export const productModels: ProductModel[] = [
 ];
 
 export const tags: Tag[] = [
+  { id: 0, name: '全部' },
   { id: 1, name: '测量' },
   { id: 2, name: '触发' },
   { id: 3, name: '光标' },

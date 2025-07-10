@@ -201,9 +201,9 @@ export default function QACollectionPage() {
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
             {/* 分类过滤 - 紧凑化 */}
-            <div className="space-y-1">
+            <div className="space-y-1 md:col-span-2" id="category-filter">
               <label className="text-xs font-medium text-foreground">分类</label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -229,7 +229,7 @@ export default function QACollectionPage() {
             </div>
 
             {/* 机型过滤 - 紧凑化 */}
-            <div className="space-y-1">
+            <div className="space-y-1 md:col-span-2" id="model-filter">
               <label className="text-xs font-medium text-foreground">机型</label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -259,7 +259,7 @@ export default function QACollectionPage() {
             </div>
 
             {/* 标签过滤 - 单选模式 */}
-            <div className="space-y-1">
+            <div className="space-y-1 md:col-span-2" id="tag-filter">
               <label className="text-xs font-medium text-foreground">标签</label>
               <Popover open={tagSearchOpen} onOpenChange={setTagSearchOpen}>
                 <PopoverTrigger asChild>
@@ -306,14 +306,15 @@ export default function QACollectionPage() {
             </div>
 
             {/* 排序和清除按钮整合 - 新增紧凑布局 */}
-            <div className="space-y-1">
+            <div className="space-y-1 md:col-span-6" id="sort-filter">
               <label className="text-xs font-medium text-foreground">排序</label>
               <div className="flex gap-1">
                 <Tabs value={sortBy} onValueChange={(value) => setSortBy(value as QAFilters['sortBy'])} className="flex-1">
-                  <TabsList className="grid grid-cols-3 h-8 text-xs w-300">
+                  <TabsList className="grid grid-cols-4 h-8 text-xs gap-2">
                     <TabsTrigger value="latest" className="text-xs px-2">最新</TabsTrigger>
                     <TabsTrigger value="best" className="text-xs px-2">最佳</TabsTrigger>
                     <TabsTrigger value="ranking" className="text-xs px-2">排行</TabsTrigger>
+                    <TabsTrigger value="my-share" className="text-xs px-2">我的分享</TabsTrigger>
                   </TabsList>
                 </Tabs>
                 {(searchTerm || selectedCategory || selectedModel || selectedTags.length > 0) && (

@@ -61,10 +61,10 @@ export function QuestionCard({ question }: QuestionCardProps) {
             <ThumbsUp className="w-3.5 h-3.5" />
             <span>{question.likes_count}</span>
           </span>
-          <span className="flex items-center gap-1">
+          {/* <span className="flex items-center gap-1">
             <MessageCircle className="w-3.5 h-3.5" />
             <span>{question.replies_count}</span>
-          </span>
+          </span> */}
         </div>
         <div className="text-xs">
           <span>最后更新: {formatDate(question.updated_at)}</span>
