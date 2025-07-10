@@ -57,6 +57,8 @@ export const questions: Question[] = [
     replies_count: 3,
     tags: [{ id: 11, name: '带宽' }, { id: 1, name: '测量' }],
     updated_at: '2024-01-16T14:20:00Z',
+    user_id: 'user123',
+    is_shared: true
   },
   {
     id: 2,
@@ -201,6 +203,36 @@ export const questions: Question[] = [
     tags: [{ id: 14, name: '参数设置' }, { id: 7, name: 'PC软件' }],
     updated_at: '2024-01-05T14:10:00Z',
   },
+  {
+    id: 13,
+    title: '分享：ADS900A示波器实现高精度相位测量的技巧',
+    content: '总结了一些使用ADS900A进行相位测量的实用技巧和注意事项，希望对大家有帮助。',
+    created_at: '2024-01-03T08:30:00Z',
+    category_id: 1,
+    product_model_id: 2,
+    views_count: 245,
+    likes_count: 28,
+    replies_count: 12,
+    tags: [{ id: 1, name: '测量' }, { id: 14, name: '参数设置' }],
+    updated_at: '2024-01-04T16:20:00Z',
+    user_id: 'user123',
+    is_shared: true
+  },
+  {
+    id: 14,
+    title: '分享：XDS3000示波器自动测量功能实战应用',
+    content: '分享一下在实际工作中如何高效使用XDS3000的自动测量功能，包括一些不常见但很实用的技巧。',
+    created_at: '2024-01-02T11:20:00Z',
+    category_id: 1,
+    product_model_id: 3,
+    views_count: 198,
+    likes_count: 32,
+    replies_count: 15,
+    tags: [{ id: 1, name: '测量' }, { id: 14, name: '参数设置' }],
+    updated_at: '2024-01-03T09:45:00Z',
+    user_id: 'user123',
+    is_shared: true
+  }
 ];
 
 // 辅助函数：根据分类ID获取产品型号

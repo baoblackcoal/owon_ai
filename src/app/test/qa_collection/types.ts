@@ -27,6 +27,8 @@ export interface Question {
   replies_count: number;
   tags: Tag[];
   updated_at: string;
+  user_id?: string; // 添加用户ID字段
+  is_shared?: boolean; // 添加是否为用户分享的标识
 }
 
 export interface QAFilters {
@@ -34,6 +36,6 @@ export interface QAFilters {
   category: number | null;
   model: number | null;
   tags: number[];
-  sortBy: 'latest' | 'best' | 'ranking';
+  sortBy: 'latest' | 'best' | 'ranking' | 'my-share';
   period: 'week' | 'month' | 'quarter' | 'year' | 'all';
 } 

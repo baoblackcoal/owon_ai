@@ -106,43 +106,14 @@ export default function QACollectionPage() {
       result = result.filter(question => question.product_model_id === selectedModel);
     }
 
-    // 标签过滤 (AND逻辑：选中的所有标签都必须包含)
+    // 标签过滤 (单选模式)
     if (selectedTags.length > 0) {
       result = result.filter(question => 
-        selectedTags.every(tagId => 
-          question.tags.some(tag => tag.id === tagId)
-        )
+        question.tags.some(tag => tag.id === selectedTags[0])
       );
     }
 
-    // 时间范围过滤（仅在排行模式下生效）
-    if (sortBy === 'ranking' && period !== 'all') {
-      const now = new Date();
-      let timeLimit: Date;
-      
-      switch (period) {
-        case 'week':
-          timeLimit = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-          break;
-        case 'month':
-          timeLimit = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-          break;
-        case 'quarter':
-          timeLimit = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
-          break;
-        case 'year':
-          timeLimit = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
-          break;
-        default:
-          timeLimit = new Date(0);
-      }
-      
-      result = result.filter(question => 
-        new Date(question.created_at) >= timeLimit
-      );
-    }
-
-    // 排序
+    // 排序和特殊过滤
     switch (sortBy) {
       case 'latest':
         result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
@@ -151,7 +122,41 @@ export default function QACollectionPage() {
         result.sort((a, b) => b.likes_count - a.likes_count);
         break;
       case 'ranking':
+        // 时间范围过滤（仅在排行模式下生效）
+        if (period !== 'all') {
+          const now = new Date();
+          let timeLimit: Date;
+          
+          switch (period) {
+            case 'week':
+              timeLimit = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+              break;
+            case 'month':
+              timeLimit = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+              break;
+            case 'quarter':
+              timeLimit = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+              break;
+            case 'year':
+              timeLimit = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+              break;
+            default:
+              timeLimit = new Date(0);
+          }
+          
+          result = result.filter(question => 
+            new Date(question.created_at) >= timeLimit
+          );
+        }
         result.sort((a, b) => b.views_count - a.views_count);
+        break;
+      case 'my-share':
+        // 假设当前用户ID为 'user123'
+        const currentUserId = 'user123';
+        result = result.filter(question => 
+          question.user_id === currentUserId && question.is_shared
+        );
+        result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
         break;
     }
 
