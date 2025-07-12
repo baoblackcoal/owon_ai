@@ -155,7 +155,7 @@ export default function ExperimentWorkspacePage() {
   return (
     <div className="h-screen bg-slate-50 dark:bg-slate-900 flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="border-b bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 flex-shrink-0 shadow-sm">
+      <div className=" pt-6 border-b bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 flex-shrink-0 shadow-sm">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center space-x-4">
             <Button
