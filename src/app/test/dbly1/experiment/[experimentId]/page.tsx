@@ -153,9 +153,9 @@ export default function ExperimentWorkspacePage() {
   }
 
   return (
-    <div className="h-screen bg-background flex flex-col">
+    <div className="h-screen bg-background flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex-shrink-0">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center space-x-4">
             <Button
@@ -190,29 +190,27 @@ export default function ExperimentWorkspacePage() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex min-h-0">
         {/* Manual Content */}
-        <div className={`${isFullscreen ? 'w-full' : 'w-2/3'} border-r bg-background`}>
-          <div className="h-full flex flex-col">
-            <div className="border-b px-4 py-2 bg-muted/50">
-              <div className="flex items-center space-x-2">
-                <BookOpen className="h-4 w-4" />
-                <span className="text-sm font-medium">实验手册</span>
-              </div>
+        <div className={`${isFullscreen ? 'w-full' : 'w-2/3'} border-r bg-background flex flex-col min-h-0`} id="manual-panel">
+          <div className="border-b px-4 py-2 bg-muted/50 flex-shrink-0">
+            <div className="flex items-center space-x-2">
+              <BookOpen className="h-4 w-4" />
+              <span className="text-sm font-medium">实验手册</span>
             </div>
-            <ScrollArea className="flex-1 p-6">
-              <div className="max-w-none prose prose-sm dark:prose-invert">
-                <ReactMarkdown>{experiment.manual.content}</ReactMarkdown>
-              </div>
-            </ScrollArea>
+          </div>
+          <div className="flex-1 overflow-auto p-6">
+            <div className="max-w-none prose prose-sm dark:prose-invert">
+              <ReactMarkdown>{experiment.manual.content}</ReactMarkdown>
+            </div>
           </div>
         </div>
 
         {/* Interaction Panel */}
         {!isFullscreen && (
-          <div className="w-1/3 flex flex-col">
-            <Tabs defaultValue="chat" className="flex-1 flex flex-col">
-              <TabsList className="grid w-full grid-cols-2 m-2">
+          <div className="w-1/3 flex flex-col min-h-0" id="chat-panel">
+            <Tabs defaultValue="chat" className="flex-1 flex flex-col min-h-0">
+              <TabsList className="grid w-full grid-cols-2 m-2 flex-shrink-0">
                 <TabsTrigger value="chat" className="flex items-center space-x-2">
                   <Bot className="h-4 w-4" />
                   <span>AI助教</span>
@@ -224,9 +222,9 @@ export default function ExperimentWorkspacePage() {
               </TabsList>
 
               {/* AI Chat */}
-              <TabsContent value="chat" className="flex-1 flex flex-col mx-2 mb-2">
-                <Card className="flex-1 flex flex-col">
-                  <CardHeader className="pb-2">
+              <TabsContent value="chat" className="flex-1 flex flex-col mx-2 mb-2 min-h-0">
+                <Card className="flex-1 flex flex-col min-h-0">
+                  <CardHeader className="pb-2 flex-shrink-0">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-sm">AI助教</CardTitle>
                       <Button
@@ -242,9 +240,9 @@ export default function ExperimentWorkspacePage() {
                       基于当前实验内容的智能问答
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="flex-1 flex flex-col p-0">
+                  <CardContent className="flex-1 flex flex-col p-0 min-h-0">
                     {/* Messages */}
-                    <ScrollArea className="flex-1 px-4">
+                    <div className="flex-1 overflow-auto px-4">
                       <div className="space-y-3 py-2">
                         {chatMessages.length === 0 ? (
                           <div className="text-center text-sm text-muted-foreground py-8">
@@ -293,10 +291,10 @@ export default function ExperimentWorkspacePage() {
                         )}
                         <div ref={messagesEndRef} />
                       </div>
-                    </ScrollArea>
+                    </div>
 
                     {/* Input */}
-                    <div className="border-t p-4">
+                    <div className="border-t p-4 flex-shrink-0">
                       <div className="flex space-x-2">
                         <Input
                           value={inputMessage}
@@ -320,16 +318,16 @@ export default function ExperimentWorkspacePage() {
               </TabsContent>
 
               {/* FAQ */}
-              <TabsContent value="faq" className="flex-1 flex flex-col mx-2 mb-2">
-                <Card className="flex-1 flex flex-col">
-                  <CardHeader className="pb-2">
+              <TabsContent value="faq" className="flex-1 flex flex-col mx-2 mb-2 min-h-0">
+                <Card className="flex-1 flex flex-col min-h-0">
+                  <CardHeader className="pb-2 flex-shrink-0">
                     <CardTitle className="text-sm">常见问题</CardTitle>
                     <CardDescription className="text-xs">
                       实验相关的常见问题和解答
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="flex-1 p-0">
-                    <ScrollArea className="h-full px-4">
+                  <CardContent className="flex-1 p-0 overflow-auto">
+                    <div className="px-4">
                       <div className="space-y-3 py-2">
                         <div className="text-center text-sm text-muted-foreground py-8">
                           <HelpCircle className="h-8 w-8 mx-auto mb-2 opacity-50" />
@@ -337,7 +335,7 @@ export default function ExperimentWorkspacePage() {
                           <p className="text-xs mt-1">管理员会根据学生提问整理FAQ</p>
                         </div>
                       </div>
-                    </ScrollArea>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
