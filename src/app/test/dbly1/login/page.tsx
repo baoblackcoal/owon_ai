@@ -75,10 +75,10 @@ export default function StudentLoginPage() {
             </div>
           </div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">
-            AI实验教学辅助系统
+            东北林业大学-AI实验教学辅助系统
           </h1>
           <p className="text-slate-600 dark:text-slate-300">
-            基于OWON FDS四合一仪器的智能实验教学平台
+            基于FDS四合一仪器的智能实验教学平台
           </p>
         </div>
 

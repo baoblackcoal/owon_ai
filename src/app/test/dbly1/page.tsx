@@ -86,10 +86,10 @@ export default function DblyMainPage() {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2">
-              AI实验教学辅助系统
+              东北林业大学-AI实验教学辅助系统
             </h1>
             <p className="text-lg text-slate-600 dark:text-slate-300">
-              基于OWON FDS四合一仪器的智能实验教学平台
+              基于FDS四合一仪器的智能实验教学平台
             </p>
           </div>
           <div className="flex items-center space-x-4">
@@ -121,7 +121,7 @@ export default function DblyMainPage() {
         {/* Course Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCourses.map((course: Course) => (
-            <Card key={course.id} className="hover:shadow-xl transition-all duration-300 cursor-pointer bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 hover:scale-105 hover:bg-white dark:hover:bg-slate-800">
+            <Card key={course.id} className="py-4 hover:shadow-xl transition-all duration-300 cursor-pointer bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 hover:scale-105 hover:bg-white dark:hover:bg-slate-800">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <Badge className={getCategoryColor(course.category) + " border"}>
@@ -208,7 +208,7 @@ function CourseDetailPage({ course, onBack, student }: { course: Course; onBack:
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {course.experiments.map((experiment) => (
-            <Card key={experiment.id} className="hover:shadow-xl transition-all duration-300 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 hover:scale-105 hover:bg-white dark:hover:bg-slate-800">
+            <Card key={experiment.id} className="py-4 hover:shadow-xl transition-all duration-300 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 hover:scale-105 hover:bg-white dark:hover:bg-slate-800">
               <CardHeader>
                 <CardTitle className="text-lg text-slate-900 dark:text-white">{experiment.name}</CardTitle>
                 <CardDescription className="text-slate-600 dark:text-slate-300">{experiment.description}</CardDescription>
