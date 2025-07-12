@@ -146,20 +146,66 @@ export const mockCourses: Course[] = [
       },
       {
         id: 'exp-digital-2',
-        name: '组合逻辑电路设计',
-        description: '设计和测试各种组合逻辑电路，如译码器、编码器、数据选择器等',
+        name: '触发器',
+        description: '学习数字系统的触发器，触发器是构成各种时序电路的最基本逻辑单元。',
         difficulty: 'intermediate',
         estimatedTime: 3,
-        equipment: ['OWON FDS', '74LS138', '74LS148', '74LS151', '面包板'],
+        equipment: ['OWON FDS', '数字逻辑实验箱', '74LS112/CC4027', '74LS74/CC4013'],
         manual: mockManuals[1]
       },
       {
         id: 'exp-digital-3',
+        name: '计数器及应用',
+        description: '学习用集成触发器构成计数器的方法，掌握中规模集成计数器的使用及功能测试。',
+        difficulty: 'intermediate',
+        estimatedTime: 4,
+        equipment: ['FDS', '74LS74', '74LS161', '74LS194', '面包板'],
+        manual: {
+          id: 'manual-digital-3',
+          title: '时序逻辑电路分析',
+          content: '# 时序逻辑电路分析\n\n## 实验目的\n学习时序逻辑电路的基本原理...',
+          sections: []
+        }
+      },
+      {
+        id: 'exp-digital-4',
+        name: '组合逻辑电路设计',
+        description: '学习数字系统的触发器，触发器是构成各种时序电路的最基本逻辑单元。',
+        difficulty: 'intermediate',
+        estimatedTime: 3,
+        equipment: ['OWON FDS', '数字逻辑实验箱', '74LS112/CC4027', '74LS74/CC4013', '74HCT04'],
+        manual: mockManuals[1]
+      },
+      {
+        id: 'exp-digital-5',
         name: '时序逻辑电路分析',
         description: '分析触发器、计数器、寄存器等时序逻辑电路的工作原理',
         difficulty: 'advanced',
         estimatedTime: 4,
-        equipment: ['OWON FDS', '74LS74', '74LS161', '74LS194', '面包板'],
+        equipment: ['FDS', '74LS74', '74LS161', '74LS194', '面包板'],
+        manual: {
+          id: 'manual-digital-3',
+          title: '时序逻辑电路分析',
+          content: '# 时序逻辑电路分析\n\n## 实验目的\n学习时序逻辑电路的基本原理...',
+          sections: []
+        }
+      },
+      {
+        id: 'exp-digital-6',
+        name: '组合逻辑电路设计',
+        description: '学习数字系统的触发器，触发器是构成各种时序电路的最基本逻辑单元。',
+        difficulty: 'intermediate',
+        estimatedTime: 3,
+        equipment: ['OWON FDS', '数字逻辑实验箱', '74LS112/CC4027', '74LS74/CC4013', '74HCT04'],
+        manual: mockManuals[1]
+      },
+      {
+        id: 'exp-digital-7',
+        name: '时序逻辑电路分析',
+        description: '分析触发器、计数器、寄存器等时序逻辑电路的工作原理',
+        difficulty: 'advanced',
+        estimatedTime: 4,
+        equipment: ['FDS', '74LS74', '74LS161', '74LS194', '面包板'],
         manual: {
           id: 'manual-digital-3',
           title: '时序逻辑电路分析',
@@ -211,6 +257,48 @@ export const mockCourses: Course[] = [
           content: '# 波形发生器电路\n\n## 实验目的\n学习各种波形发生器的工作原理...',
           sections: []
         }
+      },
+      {
+        id: 'exp-analog-4',
+        name: '波形发生器电路',
+        description: '设计正弦波、方波、三角波发生器电路',
+        difficulty: 'advanced',
+        estimatedTime: 4,
+        equipment: ['OWON FDS', 'LM741', 'LM555', '电阻', '电容', '面包板'],
+        manual: {
+          id: 'manual-analog-3',
+          title: '波形发生器电路',
+          content: '# 波形发生器电路\n\n## 实验目的\n学习各种波形发生器的工作原理...',
+          sections: []
+        }
+      },
+      {
+        id: 'exp-analog-5',
+        name: '波形发生器电路',
+        description: '设计正弦波、方波、三角波发生器电路',
+        difficulty: 'advanced',
+        estimatedTime: 4,
+        equipment: ['OWON FDS', 'LM741', 'LM555', '电阻', '电容', '面包板'],
+        manual: {
+          id: 'manual-analog-3',
+          title: '波形发生器电路',
+          content: '# 波形发生器电路\n\n## 实验目的\n学习各种波形发生器的工作原理...',
+          sections: []
+        }
+      },
+      {
+        id: 'exp-analog-6',
+        name: '波形发生器电路',
+        description: '设计正弦波、方波、三角波发生器电路',
+        difficulty: 'advanced',
+        estimatedTime: 4,
+        equipment: ['OWON FDS', 'LM741', 'LM555', '电阻', '电容', '面包板'],
+        manual: {
+          id: 'manual-analog-3',
+          title: '波形发生器电路',
+          content: '# 波形发生器电路\n\n## 实验目的\n学习各种波形发生器的工作原理...',
+          sections: []
+        }
       }
     ]
   },
@@ -236,6 +324,133 @@ export const mockCourses: Course[] = [
       },
       {
         id: 'exp-basic-2',
+        name: '基尔霍夫定律验证',
+        description: '验证基尔霍夫电流定律和电压定律',
+        difficulty: 'intermediate',
+        estimatedTime: 2,
+        equipment: ['OWON FDS', '电阻', '面包板'],
+        manual: {
+          id: 'manual-basic-2',
+          title: '基尔霍夫定律验证',
+          content: '# 基尔霍夫定律验证\n\n## 实验目的\n验证KCL和KVL定律...',
+          sections: []
+        }
+      },
+      {
+        id: 'exp-basic-3',
+        name: '基尔霍夫定律验证',
+        description: '验证基尔霍夫电流定律和电压定律',
+        difficulty: 'intermediate',
+        estimatedTime: 2,
+        equipment: ['OWON FDS', '电阻', '面包板'],
+        manual: {
+          id: 'manual-basic-2',
+          title: '基尔霍夫定律验证',
+          content: '# 基尔霍夫定律验证\n\n## 实验目的\n验证KCL和KVL定律...',
+          sections: []
+        }
+      },
+      {
+        id: 'exp-basic-4',
+        name: '基尔霍夫定律验证',
+        description: '验证基尔霍夫电流定律和电压定律',
+        difficulty: 'intermediate',
+        estimatedTime: 2,
+        equipment: ['OWON FDS', '电阻', '面包板'],
+        manual: {
+          id: 'manual-basic-2',
+          title: '基尔霍夫定律验证',
+          content: '# 基尔霍夫定律验证\n\n## 实验目的\n验证KCL和KVL定律...',
+          sections: []
+        }
+      },
+      {
+        id: 'exp-basic-2',
+        name: '基尔霍夫定律验证',
+        description: '验证基尔霍夫电流定律和电压定律',
+        difficulty: 'intermediate',
+        estimatedTime: 2,
+        equipment: ['OWON FDS', '电阻', '面包板'],
+        manual: {
+          id: 'manual-basic-2',
+          title: '基尔霍夫定律验证',
+          content: '# 基尔霍夫定律验证\n\n## 实验目的\n验证KCL和KVL定律...',
+          sections: []
+        }
+      },
+      {
+        id: 'exp-basic-5',
+        name: '基尔霍夫定律验证',
+        description: '验证基尔霍夫电流定律和电压定律',
+        difficulty: 'intermediate',
+        estimatedTime: 2,
+        equipment: ['OWON FDS', '电阻', '面包板'],
+        manual: {
+          id: 'manual-basic-2',
+          title: '基尔霍夫定律验证',
+          content: '# 基尔霍夫定律验证\n\n## 实验目的\n验证KCL和KVL定律...',
+          sections: []
+        }
+      },
+      {
+        id: 'exp-basic-2',
+        name: '基尔霍夫定律验证',
+        description: '验证基尔霍夫电流定律和电压定律',
+        difficulty: 'intermediate',
+        estimatedTime: 2,
+        equipment: ['OWON FDS', '电阻', '面包板'],
+        manual: {
+          id: 'manual-basic-2',
+          title: '基尔霍夫定律验证',
+          content: '# 基尔霍夫定律验证\n\n## 实验目的\n验证KCL和KVL定律...',
+          sections: []
+        }
+      },
+      {
+        id: 'exp-basic-2',
+        name: '基尔霍夫定律验证',
+        description: '验证基尔霍夫电流定律和电压定律',
+        difficulty: 'intermediate',
+        estimatedTime: 2,
+        equipment: ['OWON FDS', '电阻', '面包板'],
+        manual: {
+          id: 'manual-basic-2',
+          title: '基尔霍夫定律验证',
+          content: '# 基尔霍夫定律验证\n\n## 实验目的\n验证KCL和KVL定律...',
+          sections: []
+        }
+      },
+      {
+        id: 'exp-basic-6',
+        name: '基尔霍夫定律验证',
+        description: '验证基尔霍夫电流定律和电压定律',
+        difficulty: 'intermediate',
+        estimatedTime: 2,
+        equipment: ['OWON FDS', '电阻', '面包板'],
+        manual: {
+          id: 'manual-basic-2',
+          title: '基尔霍夫定律验证',
+          content: '# 基尔霍夫定律验证\n\n## 实验目的\n验证KCL和KVL定律...',
+          sections: []
+        }
+      },
+      {
+        id: 'exp-basic-7',
+        name: '基尔霍夫定律验证',
+        description: '验证基尔霍夫电流定律和电压定律',
+        difficulty: 'intermediate',
+        estimatedTime: 2,
+        equipment: ['OWON FDS', '电阻', '面包板'],
+        manual: {
+          id: 'manual-basic-2',
+          title: '基尔霍夫定律验证',
+          content: '# 基尔霍夫定律验证\n\n## 实验目的\n验证KCL和KVL定律...',
+          sections: []
+        }
+      }
+      ,
+      {
+        id: 'exp-basic-8',
         name: '基尔霍夫定律验证',
         description: '验证基尔霍夫电流定律和电压定律',
         difficulty: 'intermediate',
