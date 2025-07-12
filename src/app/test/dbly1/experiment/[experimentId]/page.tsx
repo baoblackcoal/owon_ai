@@ -212,7 +212,7 @@ export default function ExperimentWorkspacePage() {
 
         {/* Interaction Panel */}
         {!isFullscreen && (
-          <div className="w-1/3 flex flex-col h-[calc(100vh-56px)] bg-slate-50 dark:bg-slate-900" id="chat-faq-panel">
+          <div className="w-1/3 flex flex-col h-[calc(100vh-56px)] bg-slate-50 dark:bg-slate-900 pb-10" id="chat-faq-panel">
             <Tabs defaultValue="chat" className="flex-1 flex flex-col h-full">
               <TabsList className="grid w-full grid-cols-2 m-2 flex-shrink-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                 <TabsTrigger value="chat" className="flex items-center space-x-2 data-[state=active]:bg-blue-50 dark:data-[state=active]:bg-blue-950/30 data-[state=active]:text-blue-700 dark:data-[state=active]:text-blue-300">
@@ -231,7 +231,7 @@ export default function ExperimentWorkspacePage() {
                   <Card className="h-full flex flex-col bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 shadow-sm">
                     <CardHeader className="pb-2 flex-shrink-0">
                       <div className="flex items-center justify-between">
-                        <CardTitle className="text-sm text-slate-900 dark:text-white">AI助教</CardTitle>
+                        <CardTitle className="text-base text-slate-900 dark:text-white">AI助教</CardTitle>
                         <Button
                           variant="ghost"
                           size="sm"
@@ -241,7 +241,7 @@ export default function ExperimentWorkspacePage() {
                           <RotateCcw className="h-3 w-3" />
                         </Button>
                       </div>
-                      <CardDescription className="text-xs text-slate-600 dark:text-slate-400">
+                      <CardDescription className="text-sm text-slate-600 dark:text-slate-400">
                         基于当前实验内容的智能问答
                       </CardDescription>
                     </CardHeader>
@@ -250,17 +250,27 @@ export default function ExperimentWorkspacePage() {
                       <div className="flex-1 overflow-auto px-4">
                         <div className="space-y-3 py-2">
                           {chatMessages.length === 0 ? (
-                            <div className="text-center text-sm text-slate-500 dark:text-slate-400 py-8">
-                              <Bot className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                              <p>开始向AI助教提问吧！</p>
-                              <p className="text-xs mt-1">我会根据当前实验内容为您答疑</p>
+                            <div className="text-center text-normal text-slate-500 dark:text-slate-400 py-8">
+                              {/* <Bot className="h-8 w-8 mx-auto mb-2 opacity-50" /> */}
+                              {/* <p>开始向AI助教提问吧！</p>
+                              <p className="text-xs mt-1">我会根据当前实验内容为您答疑</p> */}
                               {experiment.aiChatData && experiment.aiChatData.length > 0 && (
-                                <div className="mt-4 text-left">
-                                  <p className="font-medium mb-2">示例问答：</p>
+                                <div className="mt-4 space-y-3">
                                   {experiment.aiChatData.map((item, index) => (
-                                    <div key={index} className="mb-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3">
-                                      <p className="text-slate-700 dark:text-slate-300 font-medium">{item.question}</p>
-                                      <p className="text-slate-600 dark:text-slate-400 mt-1 text-xs">{item.answer}</p>
+                                    <div key={index} className="space-y-2">
+                                      <div className="flex justify-end">
+                                        <div className="text-left max-w-[80%] rounded-lg px-3 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm">
+                                          {item.question}
+                                        </div>
+                                      </div>
+                                      <div className="flex justify-start">
+                                        <div className="max-w-[80%] rounded-lg px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white text-sm text-left">
+                                          <div className="flex items-start space-x-2">
+                                            <Bot className="h-4 w-4 mt-0.5 flex-shrink-0 text-blue-600 dark:text-blue-400" />
+                                            <div className="whitespace-pre-wrap text-left">{item.answer}</div>
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
                                   ))}
                                 </div>
@@ -338,26 +348,26 @@ export default function ExperimentWorkspacePage() {
                 <TabsContent value="faq" className="absolute inset-0" id="faq-content">
                   <Card className="h-full flex flex-col bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 shadow-sm">
                     <CardHeader className="pb-2 flex-shrink-0">
-                      <CardTitle className="text-sm text-slate-900 dark:text-white">常见问题</CardTitle>
-                      <CardDescription className="text-xs text-slate-600 dark:text-slate-400">
+                      {/* <CardTitle className="text-base text-slate-900 dark:text-white">常见问题</CardTitle>
+                      <CardDescription className="text-slate-600 dark:text-slate-400">
                         实验相关的常见问题和解答
-                      </CardDescription>
+                      </CardDescription> */}
                     </CardHeader>
                     <CardContent className="flex-1 p-0 overflow-auto">
                       <div className="px-4">
                         <div className="space-y-3 py-2">
                           {experiment.faqData ? (
                             <div>
-                              <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-3">
+                              <h3 className="font-medium text-slate-900 dark:text-white mb-3">
                                 {experiment.faqData.title}
                               </h3>
                               <div className="space-y-4">
                                 {experiment.faqData.questions.map((item, index) => (
-                                  <div key={index} className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3">
-                                    <p className="text-sm font-medium text-slate-900 dark:text-white mb-2">
+                                  <div key={index} className="text-base bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3">
+                                    <p className="font-medium text-slate-900 dark:text-white mb-2">
                                       {index + 1}. {item.question}
                                     </p>
-                                    <p className="text-xs text-slate-600 dark:text-slate-400">
+                                    <p className="text-sm text-slate-600 dark:text-slate-400">
                                       {item.answer}
                                     </p>
                                   </div>
@@ -365,7 +375,7 @@ export default function ExperimentWorkspacePage() {
                               </div>
                             </div>
                           ) : (
-                            <div className="text-center text-sm text-slate-500 dark:text-slate-400 py-8">
+                            <div className="text-center text-slate-500 dark:text-slate-400 py-8">
                               <HelpCircle className="h-8 w-8 mx-auto mb-2 opacity-50" />
                               <p>暂无常见问题</p>
                               <p className="text-xs mt-1">管理员会根据学生提问整理FAQ</p>
