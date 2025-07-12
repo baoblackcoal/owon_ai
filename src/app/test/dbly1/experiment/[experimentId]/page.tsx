@@ -1,0 +1,355 @@
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Separator } from '@/components/ui/separator';
+import { mockCourses, generateMockAIResponse, saveChatMessage, getExperimentChatHistory } from '../../mockData';
+import { ArrowLeft, Bot, User, Send, FileText, MessageSquare, Maximize2, Minimize2, RotateCcw, BookOpen, HelpCircle } from 'lucide-react';
+import { Student, Experiment, ChatMessage } from '../../types';
+import ReactMarkdown from 'react-markdown';
+
+interface ExperimentWorkspaceProps {
+  params: {
+    experimentId: string;
+  };
+}
+
+export default function ExperimentWorkspacePage({ params }: ExperimentWorkspaceProps) {
+  const { experimentId } = params;
+  const router = useRouter();
+  const [student, setStudent] = useState<Student | null>(null);
+  const [experiment, setExperiment] = useState<Experiment | null>(null);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // 检查登录状态和获取实验信息
+  useEffect(() => {
+    const studentInfo = localStorage.getItem('dbly1-student');
+    if (!studentInfo) {
+      router.push('/test/dbly1/login');
+      return;
+    }
+
+    try {
+      const parsedStudent = JSON.parse(studentInfo);
+      setStudent({
+        ...parsedStudent,
+        loginTime: new Date(parsedStudent.loginTime)
+      });
+    } catch (error) {
+      console.error('Failed to parse student info:', error);
+      router.push('/test/dbly1/login');
+      return;
+    }
+
+    // 查找实验信息
+    const foundExperiment = mockCourses
+      .flatMap(course => course.experiments)
+      .find(exp => exp.id === experimentId);
+
+    if (!foundExperiment) {
+      router.push('/test/dbly1');
+      return;
+    }
+
+    setExperiment(foundExperiment);
+  }, [experimentId, router]);
+
+  // 加载聊天历史
+  useEffect(() => {
+    if (student && experiment) {
+      const history = getExperimentChatHistory(experiment.id, student.id);
+      setChatMessages(history);
+    }
+  }, [student, experiment]);
+
+  // 自动滚动到底部
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages]);
+
+  const handleSendMessage = async () => {
+    if (!inputMessage.trim() || !student || !experiment) return;
+
+    setIsLoading(true);
+    const userMessage = inputMessage.trim();
+    setInputMessage('');
+
+    // 添加用户消息
+    const newUserMessage: ChatMessage = {
+      id: `msg-${Date.now()}`,
+      role: 'user',
+      content: userMessage,
+      timestamp: new Date(),
+      studentId: student.id,
+      experimentId: experiment.id
+    };
+
+    setChatMessages(prev => [...prev, newUserMessage]);
+
+    try {
+      // 模拟AI响应
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const aiResponse = generateMockAIResponse(userMessage, experiment.id);
+      
+      const aiMessage: ChatMessage = {
+        id: `msg-${Date.now() + 1}`,
+        role: 'assistant',
+        content: aiResponse,
+        timestamp: new Date(),
+        studentId: student.id,
+        experimentId: experiment.id
+      };
+
+      setChatMessages(prev => [...prev, aiMessage]);
+      
+      // 保存消息到存储
+      saveChatMessage({
+        role: 'user',
+        content: userMessage,
+        studentId: student.id,
+        experimentId: experiment.id
+      });
+      
+      saveChatMessage({
+        role: 'assistant',
+        content: aiResponse,
+        studentId: student.id,
+        experimentId: experiment.id
+      });
+
+    } catch (error) {
+      console.error('Error sending message:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  const clearChat = () => {
+    setChatMessages([]);
+  };
+
+  if (!student || !experiment) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-300">正在加载实验...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-screen bg-background flex flex-col">
+      {/* Header */}
+      <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="flex items-center justify-between px-4 py-3">
+          <div className="flex items-center space-x-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => router.push('/test/dbly1')}
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              返回
+            </Button>
+            <div>
+              <h1 className="text-lg font-semibold">{experiment.name}</h1>
+              <p className="text-sm text-muted-foreground">
+                {student.name} ({student.studentNumber})
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Badge variant="outline">
+              {experiment.difficulty === 'beginner' ? '初级' : 
+               experiment.difficulty === 'intermediate' ? '中级' : '高级'}
+            </Badge>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsFullscreen(!isFullscreen)}
+            >
+              {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Manual Content */}
+        <div className={`${isFullscreen ? 'w-full' : 'w-2/3'} border-r bg-background`}>
+          <div className="h-full flex flex-col">
+            <div className="border-b px-4 py-2 bg-muted/50">
+              <div className="flex items-center space-x-2">
+                <BookOpen className="h-4 w-4" />
+                <span className="text-sm font-medium">实验手册</span>
+              </div>
+            </div>
+            <ScrollArea className="flex-1 p-6">
+              <div className="max-w-none prose prose-sm dark:prose-invert">
+                <ReactMarkdown>{experiment.manual.content}</ReactMarkdown>
+              </div>
+            </ScrollArea>
+          </div>
+        </div>
+
+        {/* Interaction Panel */}
+        {!isFullscreen && (
+          <div className="w-1/3 flex flex-col">
+            <Tabs defaultValue="chat" className="flex-1 flex flex-col">
+              <TabsList className="grid w-full grid-cols-2 m-2">
+                <TabsTrigger value="chat" className="flex items-center space-x-2">
+                  <Bot className="h-4 w-4" />
+                  <span>AI助教</span>
+                </TabsTrigger>
+                <TabsTrigger value="faq" className="flex items-center space-x-2">
+                  <HelpCircle className="h-4 w-4" />
+                  <span>常见问题</span>
+                </TabsTrigger>
+              </TabsList>
+
+              {/* AI Chat */}
+              <TabsContent value="chat" className="flex-1 flex flex-col mx-2 mb-2">
+                <Card className="flex-1 flex flex-col">
+                  <CardHeader className="pb-2">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-sm">AI助教</CardTitle>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={clearChat}
+                        className="h-6 w-6 p-0"
+                      >
+                        <RotateCcw className="h-3 w-3" />
+                      </Button>
+                    </div>
+                    <CardDescription className="text-xs">
+                      基于当前实验内容的智能问答
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-1 flex flex-col p-0">
+                    {/* Messages */}
+                    <ScrollArea className="flex-1 px-4">
+                      <div className="space-y-3 py-2">
+                        {chatMessages.length === 0 ? (
+                          <div className="text-center text-sm text-muted-foreground py-8">
+                            <Bot className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                            <p>开始向AI助教提问吧！</p>
+                            <p className="text-xs mt-1">我会根据当前实验内容为您答疑</p>
+                          </div>
+                        ) : (
+                          chatMessages.map((message) => (
+                            <div
+                              key={message.id}
+                              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                            >
+                              <div
+                                className={`max-w-[80%] rounded-lg px-3 py-2 text-sm ${
+                                  message.role === 'user'
+                                    ? 'bg-primary text-primary-foreground'
+                                    : 'bg-muted'
+                                }`}
+                              >
+                                <div className="flex items-start space-x-2">
+                                  {message.role === 'assistant' && (
+                                    <Bot className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                                  )}
+                                  <div className="whitespace-pre-wrap">
+                                    {message.content}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))
+                        )}
+                        {isLoading && (
+                          <div className="flex justify-start">
+                            <div className="bg-muted rounded-lg px-3 py-2 text-sm">
+                              <div className="flex items-center space-x-2">
+                                <Bot className="h-4 w-4" />
+                                <div className="flex space-x-1">
+                                  <div className="w-2 h-2 bg-current rounded-full animate-bounce"></div>
+                                  <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                                  <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        <div ref={messagesEndRef} />
+                      </div>
+                    </ScrollArea>
+
+                    {/* Input */}
+                    <div className="border-t p-4">
+                      <div className="flex space-x-2">
+                        <Input
+                          value={inputMessage}
+                          onChange={(e) => setInputMessage(e.target.value)}
+                          onKeyPress={handleKeyPress}
+                          placeholder="输入您的问题..."
+                          disabled={isLoading}
+                          className="flex-1"
+                        />
+                        <Button
+                          onClick={handleSendMessage}
+                          disabled={!inputMessage.trim() || isLoading}
+                          size="sm"
+                        >
+                          <Send className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* FAQ */}
+              <TabsContent value="faq" className="flex-1 flex flex-col mx-2 mb-2">
+                <Card className="flex-1 flex flex-col">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm">常见问题</CardTitle>
+                    <CardDescription className="text-xs">
+                      实验相关的常见问题和解答
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-1 p-0">
+                    <ScrollArea className="h-full px-4">
+                      <div className="space-y-3 py-2">
+                        <div className="text-center text-sm text-muted-foreground py-8">
+                          <HelpCircle className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                          <p>暂无常见问题</p>
+                          <p className="text-xs mt-1">管理员会根据学生提问整理FAQ</p>
+                        </div>
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+} 
