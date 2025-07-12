@@ -16,6 +16,17 @@ export interface Experiment {
   estimatedTime: number; // 小时
   equipment: string[];
   manual: ExperimentManual;
+  aiChatData?: {
+    question: string;
+    answer: string;
+  }[];
+  faqData?: {
+    title: string;
+    questions: {
+      question: string;
+      answer: string;
+    }[];
+  };
 }
 
 // 实验手册

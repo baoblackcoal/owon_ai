@@ -155,7 +155,7 @@ export default function ExperimentWorkspacePage() {
   return (
     <div className="h-screen bg-slate-50 dark:bg-slate-900 flex flex-col overflow-hidden">
       {/* Header */}
-      <div className=" pt-6 border-b bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 flex-shrink-0 shadow-sm">
+      <div className="border-b bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-slate-200 dark:border-slate-700 flex-shrink-0 shadow-sm">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center space-x-4">
             <Button
@@ -254,6 +254,17 @@ export default function ExperimentWorkspacePage() {
                               <Bot className="h-8 w-8 mx-auto mb-2 opacity-50" />
                               <p>开始向AI助教提问吧！</p>
                               <p className="text-xs mt-1">我会根据当前实验内容为您答疑</p>
+                              {experiment.aiChatData && experiment.aiChatData.length > 0 && (
+                                <div className="mt-4 text-left">
+                                  <p className="font-medium mb-2">示例问答：</p>
+                                  {experiment.aiChatData.map((item, index) => (
+                                    <div key={index} className="mb-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3">
+                                      <p className="text-slate-700 dark:text-slate-300 font-medium">{item.question}</p>
+                                      <p className="text-slate-600 dark:text-slate-400 mt-1 text-xs">{item.answer}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                           ) : (
                             chatMessages.map((message) => (
@@ -335,11 +346,31 @@ export default function ExperimentWorkspacePage() {
                     <CardContent className="flex-1 p-0 overflow-auto">
                       <div className="px-4">
                         <div className="space-y-3 py-2">
-                          <div className="text-center text-sm text-slate-500 dark:text-slate-400 py-8">
-                            <HelpCircle className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                            <p>暂无常见问题</p>
-                            <p className="text-xs mt-1">管理员会根据学生提问整理FAQ</p>
-                          </div>
+                          {experiment.faqData ? (
+                            <div>
+                              <h3 className="text-sm font-medium text-slate-900 dark:text-white mb-3">
+                                {experiment.faqData.title}
+                              </h3>
+                              <div className="space-y-4">
+                                {experiment.faqData.questions.map((item, index) => (
+                                  <div key={index} className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3">
+                                    <p className="text-sm font-medium text-slate-900 dark:text-white mb-2">
+                                      {index + 1}. {item.question}
+                                    </p>
+                                    <p className="text-xs text-slate-600 dark:text-slate-400">
+                                      {item.answer}
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="text-center text-sm text-slate-500 dark:text-slate-400 py-8">
+                              <HelpCircle className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                              <p>暂无常见问题</p>
+                              <p className="text-xs mt-1">管理员会根据学生提问整理FAQ</p>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </CardContent>
