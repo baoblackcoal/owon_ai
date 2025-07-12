@@ -14,14 +14,9 @@ import { ArrowLeft, Bot, User, Send, FileText, MessageSquare, Maximize2, Minimiz
 import { Student, Experiment, ChatMessage } from '../../types';
 import ReactMarkdown from 'react-markdown';
 
-interface ExperimentWorkspaceProps {
-  params: {
-    experimentId: string;
-  };
-}
-
-export default function ExperimentWorkspacePage({ params }: ExperimentWorkspaceProps) {
-  const { experimentId } = params;
+export default function ExperimentWorkspacePage() {
+  const params = useParams();
+  const experimentId = params.experimentId as string;
   const router = useRouter();
   const [student, setStudent] = useState<Student | null>(null);
   const [experiment, setExperiment] = useState<Experiment | null>(null);
